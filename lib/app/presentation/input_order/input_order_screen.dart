@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:kasirku_flutter/app/presentation/add_product_order/add_product_order_screen.dart';
+import 'package:kasirku_flutter/app/presentation/checkout/checkout_screen.dart';
 import 'package:kasirku_flutter/app/presentation/input_order/input_order_notifier.dart';
 import 'package:kasirku_flutter/core/helper/dialog_helper.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
@@ -59,7 +60,7 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
           Container(
               width: double.maxFinite,
               child: FilledButton(
-                onPressed: () {},
+                onPressed: () => _onPressCheckout(context),
                 child: Text('Checkout'),
               ))
         ],
@@ -179,6 +180,12 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
   _onPressAddOrder(BuildContext context) async {
     await Navigator.push(context,
         MaterialPageRoute(builder: (context) => AddProductOrderScreen()));
+    notifier.init();
+  }
+
+  _onPressCheckout(BuildContext context) async {
+    await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => CheckoutScreen()));
     notifier.init();
   }
 }
