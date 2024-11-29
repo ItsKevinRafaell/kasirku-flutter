@@ -53,15 +53,23 @@ class LoginScreen extends AppWidget<LoginNotifier, void, void> {
         content: Column(
           children: [
             TextField(
+                controller: notifier.baseUrlController,
                 decoration: InputDecoration(
                     label: Text('Base URL'), border: OutlineInputBorder())),
             SizedBox(height: 10),
             Container(
               width: double.maxFinite,
-              child: FilledButton(onPressed: () {}, child: Text('Simpan')),
+              child: FilledButton(
+                  onPressed: () => _onPressSaveBaseUrl(context),
+                  child: Text('Simpan')),
             )
           ],
         ));
+  }
+
+  _onPressSaveBaseUrl(BuildContext context) {
+    notifier.saveBaseUrl();
+    Navigator.pop(context);
   }
 
   _onPressLogin(BuildContext context) {
