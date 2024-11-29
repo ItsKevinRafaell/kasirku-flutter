@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:kasirku_flutter/app/presentation/home/home_notifier.dart';
 import 'package:kasirku_flutter/app/presentation/order/order_screen.dart';
+import 'package:kasirku_flutter/app/presentation/profil/profil_screen.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
 import 'package:kasirku_flutter/core/widget/app_widget.dart';
 
@@ -35,16 +36,19 @@ class HomeScreen extends AppWidget<HomeNotifier, void, void> {
           SizedBox(height: 30),
           Row(
             children: [
-              CircleAvatar(
-                radius: 40,
-                backgroundColor: GlobalHelper.getColorSchema(context).primary,
-                child: Text('A',
-                    style: GlobalHelper.getTextTheme(context,
-                            appTextStyle: AppTextStyle.HEADLINE_MEDIUM)
-                        ?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: GlobalHelper.getColorSchema(context)
-                                .onPrimary)),
+              InkWell(
+                onTap: () => _onPressAvatar(context),
+                child: CircleAvatar(
+                  radius: 40,
+                  backgroundColor: GlobalHelper.getColorSchema(context).primary,
+                  child: Text('A',
+                      style: GlobalHelper.getTextTheme(context,
+                              appTextStyle: AppTextStyle.HEADLINE_MEDIUM)
+                          ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: GlobalHelper.getColorSchema(context)
+                                  .onPrimary)),
+                ),
               ),
               SizedBox(width: 10),
               Expanded(
@@ -166,5 +170,10 @@ class HomeScreen extends AppWidget<HomeNotifier, void, void> {
     await Navigator.push(
         context, MaterialPageRoute(builder: (context) => OrderScreen()));
     notifier.init();
+  }
+
+  _onPressAvatar(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ProfilScreen()));
   }
 }
