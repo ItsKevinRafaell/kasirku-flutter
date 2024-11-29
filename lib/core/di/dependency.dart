@@ -6,6 +6,7 @@ import 'package:kasirku_flutter/app/presentation/home/home_notifier.dart';
 import 'package:kasirku_flutter/app/presentation/input_order/input_order_notifier.dart';
 import 'package:kasirku_flutter/app/presentation/login/login_notifier.dart';
 import 'package:kasirku_flutter/app/presentation/order/order_notifier.dart';
+import 'package:kasirku_flutter/app/presentation/print/print_notifier.dart';
 import 'package:kasirku_flutter/core/network/app_interceptor.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -41,4 +42,7 @@ void initDependency() {
 
   sl.registerFactoryParam<CheckoutNotifier, void, void>(
       (param1, param2) => CheckoutNotifier());
+
+  sl.registerFactoryParam<PrintNotifier, void, void>(
+      (param1, param2) => PrintNotifier());
 }
