@@ -23,6 +23,7 @@ _$OrderEntityImpl _$$OrderEntityImplFromJson(Map<String, dynamic> json) =>
           ? null
           : PaymentMethodEntity.fromJson(
               json['payment_method'] as Map<String, dynamic>),
+      updatedAt: json['updated_at'] as String,
       items: (json['items'] as List<dynamic>)
           .map(
               (e) => ProductItemOrderEntity.fromJson(e as Map<String, dynamic>))
@@ -43,5 +44,6 @@ Map<String, dynamic> _$$OrderEntityImplToJson(_$OrderEntityImpl instance) =>
       'paid_amount': instance.paidAmount,
       'change_amount': instance.changeAmount,
       'payment_method': instance.paymentMethod,
+      'updated_at': instance.updatedAt,
       'items': instance.items,
     };

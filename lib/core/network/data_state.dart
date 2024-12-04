@@ -1,14 +1,18 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:kasirku_flutter/core/network/base_response.dart';
 import 'package:retrofit/dio.dart';
+import 'package:dio/dio.dart';
 
 class DataState<T> extends BaseResponse {
   final T? data;
   DataState({required super.success, required super.message, this.data});
 
   factory DataState.fromJson(Map<String, dynamic> json) => DataState(
-      success: json['success'], message: json['message'], data: json['data']);
+      success: json['success'] ?? false, 
+      message: json['message']?.toString() ?? 'No message', 
+      data: json['data']);
 }
 
 class SuccessState<T> extends DataState<T> {
@@ -38,6 +42,16 @@ Future<DataState<T>> handleResponse<T>(
     } else {
       return ErrorState(
           '${httpResponse.response.statusCode} : ${httpResponse.response.statusMessage}');
+    }
+  } on DioException catch (e) {
+    try {
+      final response = ErrorState.fromJson(jsonDecode(e.response.toString()));
+      return ErrorState(
+          '${e.response?.statusCode ?? ''} : ${response.message}');
+    } catch (e1) {
+      return ErrorState(
+        '${e.response?.statusCode ?? ''} : ${e.response?.statusMessage ?? ''}',
+      );
     }
   } catch (e) {
     return ErrorState(e.toString());

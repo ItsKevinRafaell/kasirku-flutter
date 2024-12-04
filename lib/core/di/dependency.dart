@@ -1,5 +1,14 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:kasirku_flutter/app/data/repository/auth_repository.dart';
+import 'package:kasirku_flutter/app/data/repository/order_repository.dart';
+import 'package:kasirku_flutter/app/data/source/auth_api_service.dart';
+import 'package:kasirku_flutter/app/data/source/order_api_service.dart';
+import 'package:kasirku_flutter/app/domain/repository/auth_repository.dart';
+import 'package:kasirku_flutter/app/domain/repository/order_repository.dart';
+import 'package:kasirku_flutter/app/domain/usecase/auth_login.dart';
+import 'package:kasirku_flutter/app/domain/usecase/order_get_all.dart';
+import 'package:kasirku_flutter/app/domain/usecase/order_get_today.dart';
 import 'package:kasirku_flutter/app/presentation/add_product_order/add_product_order_notifier.dart';
 import 'package:kasirku_flutter/app/presentation/checkout/checkout_notifier.dart';
 import 'package:kasirku_flutter/app/presentation/home/home_notifier.dart';
@@ -26,14 +35,28 @@ void initDependency() {
 
   sl.registerSingleton<Dio>(dio);
 
+  //api service
+  sl.registerSingleton<AuthApiService>(AuthApiService(sl()));
+  sl.registerSingleton<OrderApiService>(OrderApiService(sl()));
+
+  //repository
+  sl.registerSingleton<AuthRepository>(AuthRepositoryImpl(sl()));
+  sl.registerSingleton<OrderRepository>(OrderRepositoryImpl(sl()));
+
+  //use case
+  sl.registerSingleton<AuthLoginUseCase>(AuthLoginUseCase(sl()));
+  sl.registerSingleton<OrderGetTodayUseCase>(OrderGetTodayUseCase(sl()));
+  sl.registerSingleton<OrderGetAllUseCase>(OrderGetAllUseCase(sl()));
+
+  //presentation
   sl.registerFactoryParam<LoginNotifier, void, void>(
-      (param1, param2) => LoginNotifier());
+      (param1, param2) => LoginNotifier(sl()));
 
   sl.registerFactoryParam<HomeNotifier, void, void>(
-      (param1, param2) => HomeNotifier());
+      (param1, param2) => HomeNotifier(sl()));
 
   sl.registerFactoryParam<OrderNotifier, void, void>(
-      (param1, param2) => OrderNotifier());
+      (param1, param2) => OrderNotifier(sl()));
 
   sl.registerFactoryParam<InputOrderNotifier, void, void>(
       (param1, param2) => InputOrderNotifier());

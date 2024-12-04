@@ -1,9 +1,44 @@
+import 'package:kasirku_flutter/app/domain/entity/order.dart';
+import 'package:kasirku_flutter/app/domain/usecase/order_get_today.dart';
+import 'package:kasirku_flutter/core/constant/constant.dart';
+import 'package:kasirku_flutter/core/helper/shared_preferences_helper.dart';
 import 'package:kasirku_flutter/core/provider/app_provider.dart';
 
 class HomeNotifier extends AppProvider {
+  final OrderGetTodayUseCase _orderGetTodayUseCase;
+  HomeNotifier(this._orderGetTodayUseCase) {
+    init();
+  }
+
+  String _name = '';
+  String _email = '';
+  List<OrderEntity> _listOrder = [];
+
+  String get name => _name;
+  String get email => _email;
+  List<OrderEntity> get listOrder => _listOrder;
+
   @override
-  init() {
-    // TODO: implement init
-    throw UnimplementedError();
+  init() async {
+    await _getDetailUser();
+    await _getOrder();
+  }
+
+  _getDetailUser() async {
+    showLoading();
+    _name = await SharedPreferencesHelper.getString(PREF_NAME);
+    _email = await SharedPreferencesHelper.getString(PREF_EMAIL);
+    hideLoading();
+  }
+
+  _getOrder() async {
+    showLoading();
+    final response = await _orderGetTodayUseCase();
+    if (response.success) {
+      _listOrder = response.data!;
+    } else {
+      errorMessage = response.message;
+    }
+    hideLoading();
   }
 }

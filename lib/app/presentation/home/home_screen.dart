@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:kasirku_flutter/app/domain/entity/order.dart';
 import 'package:kasirku_flutter/app/presentation/home/home_notifier.dart';
 import 'package:kasirku_flutter/app/presentation/order/order_screen.dart';
 import 'package:kasirku_flutter/app/presentation/profil/profil_screen.dart';
+import 'package:kasirku_flutter/core/helper/date_time_helper.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
+import 'package:kasirku_flutter/core/helper/number_helper.dart';
 import 'package:kasirku_flutter/core/widget/app_widget.dart';
 
 class HomeScreen extends AppWidget<HomeNotifier, void, void> {
@@ -41,7 +44,7 @@ class HomeScreen extends AppWidget<HomeNotifier, void, void> {
                 child: CircleAvatar(
                   radius: 40,
                   backgroundColor: GlobalHelper.getColorSchema(context).primary,
-                  child: Text('A',
+                  child: Text(notifier.name.substring(0, 1).toUpperCase(),
                       style: GlobalHelper.getTextTheme(context,
                               appTextStyle: AppTextStyle.HEADLINE_MEDIUM)
                           ?.copyWith(
@@ -55,7 +58,7 @@ class HomeScreen extends AppWidget<HomeNotifier, void, void> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Admin',
+                    Text(notifier.name,
                         style: GlobalHelper.getTextTheme(context,
                                 appTextStyle: AppTextStyle.TITLE_LARGE)
                             ?.copyWith(
@@ -63,7 +66,7 @@ class HomeScreen extends AppWidget<HomeNotifier, void, void> {
                                     .primary,
                                 fontWeight: FontWeight.bold)),
                     SizedBox(height: 5),
-                    Text('kevin@admin.com',
+                    Text(notifier.email,
                         style: GlobalHelper.getTextTheme(context,
                                 appTextStyle: AppTextStyle.LABEL_LARGE)
                             ?.copyWith(
@@ -94,7 +97,9 @@ class HomeScreen extends AppWidget<HomeNotifier, void, void> {
                         appTextStyle: AppTextStyle.TITLE_LARGE)
                     ?.copyWith(fontWeight: FontWeight.bold),
               )),
-              FilledButton(onPressed: () {}, child: Text('Lihat semua'))
+              FilledButton(
+                  onPressed: () => _onPressShowAllOrder(context),
+                  child: Text('Lihat semua'))
             ],
           ),
           SizedBox(height: 5),
@@ -104,16 +109,17 @@ class HomeScreen extends AppWidget<HomeNotifier, void, void> {
               separatorBuilder: (context, index) => SizedBox(
                     height: 5,
                   ),
-              itemCount: 5,
+              itemCount: notifier.listOrder.length,
               itemBuilder: (context, index) {
-                return _itemOrderLayout(context);
+                final item = notifier.listOrder[index];
+                return _itemOrderLayout(context, item);
               })
         ],
       ),
     );
   }
 
-  _itemOrderLayout(BuildContext context) {
+  _itemOrderLayout(BuildContext context, OrderEntity item) {
     return Container(
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(color: Colors.white),
@@ -121,13 +127,16 @@ class HomeScreen extends AppWidget<HomeNotifier, void, void> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('nama_pelanggan',
+              Text(item.name,
                   style: GlobalHelper.getTextTheme(context,
                           appTextStyle: AppTextStyle.BODY_LARGE)
                       ?.copyWith(
                           color: GlobalHelper.getColorSchema(context).primary,
                           fontWeight: FontWeight.bold)),
-              Text('22 Okt 2024 10:23',
+              Text(
+                  DateTimeHelper.formatDateTimeFromString(
+                      dateTimeString: item.updatedAt,
+                      format: 'dd MMM yyyy HH:mm'),
                   style: GlobalHelper.getTextTheme(context,
                           appTextStyle: AppTextStyle.BODY_SMALL)
                       ?.copyWith(
@@ -141,7 +150,8 @@ class HomeScreen extends AppWidget<HomeNotifier, void, void> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Rp. 5.000 (1 Item)',
+              Text(
+                  '${NumberHelper.formatIdr(item.totalPrice!)} (${item.items.length} item)',
                   style: GlobalHelper.getTextTheme(context,
                           appTextStyle: AppTextStyle.BODY_MEDIUM)
                       ?.copyWith(
@@ -149,7 +159,7 @@ class HomeScreen extends AppWidget<HomeNotifier, void, void> {
                           fontWeight: FontWeight.bold)),
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 3, vertical: 2),
-                  child: Text('Cash',
+                  child: Text(item.paymentMethod!.name,
                       style: GlobalHelper.getTextTheme(context,
                               appTextStyle: AppTextStyle.BODY_SMALL)
                           ?.copyWith(

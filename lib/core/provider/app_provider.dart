@@ -15,7 +15,7 @@ abstract class AppProvider with ChangeNotifier {
   set snackBarMessage(String message) => _snackBarMessage = message;
 
   showLoading() {
-    if (_isDispose) {
+    if (!_isDispose) {
       _isLoading = true;
       notifyListeners();
     }

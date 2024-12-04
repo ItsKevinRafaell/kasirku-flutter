@@ -26,11 +26,14 @@ class LoginScreen extends AppWidget<LoginNotifier, void, void> {
                     appTextStyle: AppTextStyle.DISPLAY_SMALL)),
           )),
           TextField(
+            controller: notifier.emailController,
             decoration: InputDecoration(
                 label: Text('Email'), border: OutlineInputBorder()),
           ),
           SizedBox(height: 10),
           TextField(
+            controller: notifier.passwordController,
+            obscureText: true,
             decoration: InputDecoration(
                 label: Text('Password'), border: OutlineInputBorder()),
           ),
@@ -44,6 +47,17 @@ class LoginScreen extends AppWidget<LoginNotifier, void, void> {
         ],
       ),
     ));
+  }
+
+  @override
+  checkVariable(BuildContext context) {
+    if (notifier.isLogged) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ));
+    }
   }
 
   _onPressUrlButton(BuildContext context) {
@@ -73,10 +87,6 @@ class LoginScreen extends AppWidget<LoginNotifier, void, void> {
   }
 
   _onPressLogin(BuildContext context) {
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeScreen(),
-        ));
+    notifier.login();
   }
 }
