@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:kasirku_flutter/app/presentation/add_product_order/add_product_order_screen.dart';
 import 'package:kasirku_flutter/app/presentation/checkout/checkout_screen.dart';
 import 'package:kasirku_flutter/app/presentation/input_order/input_order_notifier.dart';
+import 'package:kasirku_flutter/core/helper/date_time_helper.dart';
 import 'package:kasirku_flutter/core/helper/dialog_helper.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
 import 'package:kasirku_flutter/core/widget/app_widget.dart';
@@ -14,7 +15,7 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
       title: Text('Create Order'),
       actions: [
         IconButton(
-            onPressed: () => _onPressCustomer(context),
+            onPressed: () => _showDialogCustomer(context),
             icon: Icon(Icons.person))
       ],
     );
@@ -51,7 +52,7 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
           ListView.separated(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              separatorBuilder: (context, index) => SizedBox(height: 5),
+              separatorBuilder: (context, index) => SizedBox(height: 10),
               itemCount: 5,
               itemBuilder: (context, index) {
                 return _itemOrderLayout(context);
@@ -123,58 +124,86 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
     );
   }
 
-  _onPressCustomer(BuildContext context) {
+  _showDialogCustomer(BuildContext context) {
     DialogHelper.showBottomSheetDialog(
         context: context,
         title: 'Pembeli',
         content: Column(
           children: [
             TextField(
+              controller: notifier.nameController,
               decoration: InputDecoration(
-                label: Text('Nama'),
-                border: OutlineInputBorder(),
-              ),
+                  label: Text('Nama'),
+                  border: OutlineInputBorder(),
+                  errorText: notifier.errorCustomer[InputOrderNotifier.NAME]),
             ),
-            SizedBox(height: 5),
-            TextField(
-              decoration: InputDecoration(
-                label: Text('Gender'),
-                border: OutlineInputBorder(),
-              ),
+            SizedBox(height: 10),
+            DropdownMenu<String>(
+              expandedInsets: EdgeInsets.symmetric(horizontal: 1),
+              label: Text('Gender'),
+              errorText: notifier.errorCustomer[InputOrderNotifier.GENDER],
+              controller: notifier.genderController,
+              dropdownMenuEntries: notifier.genderListDropdown,
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 10),
             TextField(
+              controller: notifier.notesController,
               decoration: InputDecoration(
                 label: Text('Notes'),
                 border: OutlineInputBorder(),
               ),
+              maxLines: null,
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 10),
             TextField(
+              controller: notifier.emailController,
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 label: Text('Email'),
                 border: OutlineInputBorder(),
               ),
             ),
+            SizedBox(height: 10),
             TextField(
+              controller: notifier.phoneController,
               decoration: InputDecoration(
                 label: Text('Phone'),
                 border: OutlineInputBorder(),
               ),
+              keyboardType: TextInputType.phone,
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 10),
             TextField(
+              readOnly: true,
+              controller: notifier.birthdayController,
+              onTap: () => _onPressBirthday(context),
               decoration: InputDecoration(
                 label: Text('Birthday'),
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 20),
             Container(
                 width: double.maxFinite,
-                child: FilledButton(onPressed: () {}, child: Text('Simpan')))
+                child: FilledButton(
+                    onPressed: () => _onPressSaveCustomer(context),
+                    child: Text('Simpan')))
           ],
         ));
+  }
+
+  _onPressSaveCustomer(BuildContext context) {
+    Navigator.pop(context);
+    notifier.validateCustomer();
+  }
+
+  _onPressBirthday(BuildContext context) async {
+    DateTime? birthday = await showDatePicker(
+        context: context,
+        firstDate: DateTime(DateTime.now().year - 100),
+        lastDate: DateTime.now());
+    notifier.birthdayController.text =
+        DateTimeHelper.formatDateTime(dateTime: birthday, format: 'yyyy-MM-dd');
   }
 
   _onPressAddOrder(BuildContext context) async {
@@ -187,5 +216,13 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
     await Navigator.push(
         context, MaterialPageRoute(builder: (context) => CheckoutScreen()));
     notifier.init();
+  }
+
+  @override
+  checkVariable(BuildContext context) {
+    if (notifier.isShowCustomer || notifier.errorCustomer.isNotEmpty) {
+      notifier.isShowCustomer = false;
+      _showDialogCustomer(context);
+    }
   }
 }

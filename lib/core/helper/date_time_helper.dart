@@ -2,7 +2,10 @@ import 'package:intl/intl.dart';
 
 class DateTimeHelper {
   static String formatDateTime(
-      {required DateTime dateTime, String format = 'd MMM yyyy'}) {
+      {DateTime? dateTime, String format = 'd MMM yyyy'}) {
+    if (dateTime == null) {
+      return '';
+    }
     return DateFormat(format, 'id').format(dateTime);
   }
 

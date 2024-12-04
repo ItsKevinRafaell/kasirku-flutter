@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:kasirku_flutter/app/domain/entity/order.dart';
 import 'package:kasirku_flutter/app/presentation/home/home_notifier.dart';
+import 'package:kasirku_flutter/app/presentation/input_order/input_order_screen.dart';
 import 'package:kasirku_flutter/app/presentation/order/order_screen.dart';
 import 'package:kasirku_flutter/app/presentation/profil/profil_screen.dart';
 import 'package:kasirku_flutter/core/helper/date_time_helper.dart';
@@ -26,7 +27,7 @@ class HomeScreen extends AppWidget<HomeNotifier, void, void> {
   @override
   Widget? floatingActionButtonBuild(BuildContext context) {
     return FloatingActionButton(
-      onPressed: () => _onPressShowAllOrder(context),
+      onPressed: () => _onPressCreateOrder(context),
       child: Icon(Icons.add),
     );
   }
@@ -179,6 +180,12 @@ class HomeScreen extends AppWidget<HomeNotifier, void, void> {
   _onPressShowAllOrder(BuildContext context) async {
     await Navigator.push(
         context, MaterialPageRoute(builder: (context) => OrderScreen()));
+    notifier.init();
+  }
+
+  _onPressCreateOrder(BuildContext context) async {
+    await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => InputOrderScreen()));
     notifier.init();
   }
 
