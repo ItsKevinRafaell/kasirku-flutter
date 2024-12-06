@@ -20,22 +20,23 @@ Setting _$SettingFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Setting {
-  String get shop => throw _privateConstructorUsedError;
-  String get address => throw _privateConstructorUsedError;
-  String get phone => throw _privateConstructorUsedError;
+  String? get shop => throw _privateConstructorUsedError;
+  String? get address => throw _privateConstructorUsedError;
+  String? get phone => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String shop, String address, String phone) entity,
+    required TResult Function(String? shop, String? address, String? phone)
+        entity,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String shop, String address, String phone)? entity,
+    TResult? Function(String? shop, String? address, String? phone)? entity,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String shop, String address, String phone)? entity,
+    TResult Function(String? shop, String? address, String? phone)? entity,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -70,7 +71,7 @@ abstract class $SettingCopyWith<$Res> {
   factory $SettingCopyWith(Setting value, $Res Function(Setting) then) =
       _$SettingCopyWithImpl<$Res, Setting>;
   @useResult
-  $Res call({String shop, String address, String phone});
+  $Res call({String? shop, String? address, String? phone});
 }
 
 /// @nodoc
@@ -88,23 +89,23 @@ class _$SettingCopyWithImpl<$Res, $Val extends Setting>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? shop = null,
-    Object? address = null,
-    Object? phone = null,
+    Object? shop = freezed,
+    Object? address = freezed,
+    Object? phone = freezed,
   }) {
     return _then(_value.copyWith(
-      shop: null == shop
+      shop: freezed == shop
           ? _value.shop
           : shop // ignore: cast_nullable_to_non_nullable
-              as String,
-      address: null == address
+              as String?,
+      address: freezed == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
-              as String,
-      phone: null == phone
+              as String?,
+      phone: freezed == phone
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -117,7 +118,7 @@ abstract class _$$SettingEntityImplCopyWith<$Res>
       __$$SettingEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String shop, String address, String phone});
+  $Res call({String? shop, String? address, String? phone});
 }
 
 /// @nodoc
@@ -133,23 +134,23 @@ class __$$SettingEntityImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? shop = null,
-    Object? address = null,
-    Object? phone = null,
+    Object? shop = freezed,
+    Object? address = freezed,
+    Object? phone = freezed,
   }) {
     return _then(_$SettingEntityImpl(
-      shop: null == shop
+      shop: freezed == shop
           ? _value.shop
           : shop // ignore: cast_nullable_to_non_nullable
-              as String,
-      address: null == address
+              as String?,
+      address: freezed == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
-              as String,
-      phone: null == phone
+              as String?,
+      phone: freezed == phone
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -157,18 +158,17 @@ class __$$SettingEntityImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$SettingEntityImpl implements SettingEntity {
-  const _$SettingEntityImpl(
-      {required this.shop, required this.address, required this.phone});
+  const _$SettingEntityImpl({this.shop, this.address, this.phone});
 
   factory _$SettingEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$SettingEntityImplFromJson(json);
 
   @override
-  final String shop;
+  final String? shop;
   @override
-  final String address;
+  final String? address;
   @override
-  final String phone;
+  final String? phone;
 
   @override
   String toString() {
@@ -200,7 +200,8 @@ class _$SettingEntityImpl implements SettingEntity {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String shop, String address, String phone) entity,
+    required TResult Function(String? shop, String? address, String? phone)
+        entity,
   }) {
     return entity(shop, address, phone);
   }
@@ -208,7 +209,7 @@ class _$SettingEntityImpl implements SettingEntity {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String shop, String address, String phone)? entity,
+    TResult? Function(String? shop, String? address, String? phone)? entity,
   }) {
     return entity?.call(shop, address, phone);
   }
@@ -216,7 +217,7 @@ class _$SettingEntityImpl implements SettingEntity {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String shop, String address, String phone)? entity,
+    TResult Function(String? shop, String? address, String? phone)? entity,
     required TResult orElse(),
   }) {
     if (entity != null) {
@@ -263,19 +264,19 @@ class _$SettingEntityImpl implements SettingEntity {
 
 abstract class SettingEntity implements Setting {
   const factory SettingEntity(
-      {required final String shop,
-      required final String address,
-      required final String phone}) = _$SettingEntityImpl;
+      {final String? shop,
+      final String? address,
+      final String? phone}) = _$SettingEntityImpl;
 
   factory SettingEntity.fromJson(Map<String, dynamic> json) =
       _$SettingEntityImpl.fromJson;
 
   @override
-  String get shop;
+  String? get shop;
   @override
-  String get address;
+  String? get address;
   @override
-  String get phone;
+  String? get phone;
 
   /// Create a copy of Setting
   /// with the given fields replaced by the non-null parameter values.

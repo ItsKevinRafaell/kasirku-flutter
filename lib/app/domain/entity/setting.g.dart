@@ -8,9 +8,9 @@ part of 'setting.dart';
 
 _$SettingEntityImpl _$$SettingEntityImplFromJson(Map<String, dynamic> json) =>
     _$SettingEntityImpl(
-      shop: json['shop'] as String,
-      address: json['address'] as String,
-      phone: json['phone'] as String,
+      shop: json['shop'] as String?,
+      address: json['address'] as String?,
+      phone: json['phone'] as String?,
     );
 
 Map<String, dynamic> _$$SettingEntityImplToJson(_$SettingEntityImpl instance) =>

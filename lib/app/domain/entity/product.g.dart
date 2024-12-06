@@ -39,6 +39,8 @@ _$ProductItemOrderEntityImpl _$$ProductItemOrderEntityImplFromJson(
       name: json['product_name'] as String,
       quantity: (json['quantity'] as num).toInt(),
       price: (json['unit_price'] as num).toInt(),
+      barcode: json['barcode'] as String?,
+      stock: (json['stock'] as num?)?.toInt(),
       $type: json['runtimeType'] as String?,
     );
 
@@ -49,5 +51,7 @@ Map<String, dynamic> _$$ProductItemOrderEntityImplToJson(
       'product_name': instance.name,
       'quantity': instance.quantity,
       'unit_price': instance.price,
+      'barcode': instance.barcode,
+      'stock': instance.stock,
       'runtimeType': instance.$type,
     };

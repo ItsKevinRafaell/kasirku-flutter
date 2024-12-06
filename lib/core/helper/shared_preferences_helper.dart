@@ -20,4 +20,9 @@ class SharedPreferencesHelper {
     final pref = await SharedPreferences.getInstance();
     return pref.getString(key);
   }
+
+  static logout() async {
+    final pref = await SharedPreferences.getInstance();
+    await pref.clear();
+  }
 }

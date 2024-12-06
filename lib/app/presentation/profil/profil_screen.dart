@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/app_bar.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:kasirku_flutter/app/presentation/login/login_screen.dart';
 import 'package:kasirku_flutter/app/presentation/profil/profil_notifier.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
 import 'package:kasirku_flutter/core/widget/app_widget.dart';
@@ -21,8 +22,9 @@ class ProfilScreen extends AppWidget<ProfilNotifier, void, void> {
                 _headerLayout(context),
                 Container(
                     width: double.maxFinite,
-                    child:
-                        ElevatedButton(onPressed: () {}, child: Text('Logout')))
+                    child: ElevatedButton(
+                        onPressed: () => _onPressLogout(),
+                        child: Text('Logout')))
               ],
             )));
   }
@@ -36,7 +38,7 @@ class ProfilScreen extends AppWidget<ProfilNotifier, void, void> {
         CircleAvatar(
           radius: 60,
           backgroundColor: GlobalHelper.getColorSchema(context).primary,
-          child: Text('A',
+          child: Text(notifier.name.substring(0, 1),
               style: GlobalHelper.getTextTheme(context,
                       appTextStyle: AppTextStyle.DISPLAY_MEDIUM)
                   ?.copyWith(
@@ -44,14 +46,14 @@ class ProfilScreen extends AppWidget<ProfilNotifier, void, void> {
                       color: GlobalHelper.getColorSchema(context).onPrimary)),
         ),
         SizedBox(height: 20),
-        Text('Admin',
+        Text(notifier.name,
             style: GlobalHelper.getTextTheme(context,
                     appTextStyle: AppTextStyle.TITLE_LARGE)
                 ?.copyWith(
                     color: GlobalHelper.getColorSchema(context).primary,
                     fontWeight: FontWeight.bold)),
         SizedBox(height: 5),
-        Text('kevin@admin.com',
+        Text(notifier.email,
             style: GlobalHelper.getTextTheme(context,
                     appTextStyle: AppTextStyle.BODY_SMALL)
                 ?.copyWith(
@@ -59,5 +61,19 @@ class ProfilScreen extends AppWidget<ProfilNotifier, void, void> {
         SizedBox(height: 20),
       ],
     );
+  }
+
+  _onPressLogout() {
+    notifier.logout();
+  }
+
+  @override
+  checkVariable(BuildContext context) {
+    if (notifier.isLogout) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+          (route) => false);
+    }
   }
 }

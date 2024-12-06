@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:kasirku_flutter/app/domain/entity/product.dart';
 import 'package:kasirku_flutter/app/presentation/add_product_order/add_product_order_screen.dart';
 import 'package:kasirku_flutter/app/presentation/checkout/checkout_screen.dart';
 import 'package:kasirku_flutter/app/presentation/input_order/input_order_notifier.dart';
 import 'package:kasirku_flutter/core/helper/date_time_helper.dart';
 import 'package:kasirku_flutter/core/helper/dialog_helper.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
+import 'package:kasirku_flutter/core/helper/number_helper.dart';
 import 'package:kasirku_flutter/core/widget/app_widget.dart';
 
 class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
@@ -40,7 +42,8 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
                 ),
               ),
               IconButton.outlined(
-                  onPressed: () {}, icon: Icon(Icons.qr_code_scanner)),
+                  onPressed: () => _onPressBarcode(),
+                  icon: Icon(Icons.qr_code_scanner)),
               IconButton.filled(
                   onPressed: () => _onPressAddOrder(context),
                   icon: Icon(Icons.add)),
@@ -53,9 +56,10 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               separatorBuilder: (context, index) => SizedBox(height: 10),
-              itemCount: 5,
+              itemCount: notifier.listOrderItem.length,
               itemBuilder: (context, index) {
-                return _itemOrderLayout(context);
+                final item = notifier.listOrderItem[index];
+                return _itemOrderLayout(context, item);
               }),
           SizedBox(height: 10),
           Container(
@@ -69,7 +73,7 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
     ));
   }
 
-  _itemOrderLayout(BuildContext context) {
+  _itemOrderLayout(BuildContext context, ProductItemOrderEntity item) {
     return Container(
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
@@ -80,10 +84,10 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
           Row(
             children: [
               Expanded(
-                  child: Text('nama_produk',
+                  child: Text(item.name,
                       style: GlobalHelper.getTextTheme(context,
                           appTextStyle: AppTextStyle.BODY_MEDIUM))),
-              Text('Rp. 5000',
+              Text(NumberHelper.formatIdr(item.price),
                   style: GlobalHelper.getTextTheme(context,
                           appTextStyle: AppTextStyle.BODY_LARGE)
                       ?.copyWith(
@@ -94,12 +98,14 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
           Row(
             children: [
               Text(
-                'Stok: 50',
+                'Stok: ${item.stock}',
                 style: GlobalHelper.getTextTheme(context,
                     appTextStyle: AppTextStyle.BODY_MEDIUM),
               ),
               Expanded(child: SizedBox()),
-              IconButton.outlined(onPressed: () {}, icon: Icon(Icons.remove)),
+              IconButton.outlined(
+                  onPressed: () => _onPressRemoveQuantity(item),
+                  icon: Icon(Icons.remove)),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                 decoration: BoxDecoration(
@@ -108,13 +114,17 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
                         width: 0.5),
                     borderRadius: BorderRadius.circular(4)),
                 child: Text(
-                  '1',
+                  item.quantity.toString(),
                   style: GlobalHelper.getTextTheme(context,
                       appTextStyle: AppTextStyle.BODY_MEDIUM),
                 ),
               ),
               IconButton.outlined(
-                onPressed: () {},
+                onPressed: (item.stock != null &&
+                        item.stock! > 0 &&
+                        item.stock! > item.quantity)
+                    ? () => _onPressAddQuantity(item)
+                    : null,
                 icon: Icon(Icons.add),
               )
             ],
@@ -207,9 +217,12 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
   }
 
   _onPressAddOrder(BuildContext context) async {
-    await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => AddProductOrderScreen()));
-    notifier.init();
+    final List<ProductItemOrderEntity>? items = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                AddProductOrderScreen(param1: notifier.listOrderItem)));
+    if (items != null) notifier.updateItems(items);
   }
 
   _onPressCheckout(BuildContext context) async {
@@ -224,5 +237,17 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
       notifier.isShowCustomer = false;
       _showDialogCustomer(context);
     }
+  }
+
+  _onPressRemoveQuantity(ProductItemOrderEntity item) {
+    notifier.updateQuantity(item, item.quantity - 1);
+  }
+
+  _onPressAddQuantity(ProductItemOrderEntity item) {
+    notifier.updateQuantity(item, item.quantity + 1);
+  }
+
+  _onPressBarcode() {
+    notifier.scan();
   }
 }

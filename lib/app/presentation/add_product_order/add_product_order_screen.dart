@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/app_bar.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:kasirku_flutter/app/domain/entity/product.dart';
 import 'package:kasirku_flutter/app/presentation/add_product_order/add_product_order_notifier.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
+import 'package:kasirku_flutter/core/helper/number_helper.dart';
 import 'package:kasirku_flutter/core/widget/app_widget.dart';
 
-class AddProductOrderScreen
-    extends AppWidget<AddProductOrderNotifier, void, void> {
+class AddProductOrderScreen extends AppWidget<AddProductOrderNotifier,
+    List<ProductItemOrderEntity>, void> {
+  AddProductOrderScreen({required super.param1});
+
   @override
   AppBar? appBarBuild(BuildContext context) {
     return AppBar(
@@ -25,32 +29,41 @@ class AddProductOrderScreen
             children: [
               Expanded(
                   child: TextField(
+                      controller: notifier.searchController,
                       decoration: InputDecoration(
-                label: Text('Cari Produk'),
-                border: OutlineInputBorder(),
-              ))),
+                        hintText: 'Tuliskan nama atau barcode produk',
+                        label: Text('Cari Produk'),
+                        border: OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                            onPressed: () => _onPressClearSearch(),
+                            icon: Icon(Icons.clear)),
+                      ),
+                      onSubmitted: (value) => _onSubmitSearch())),
               IconButton.outlined(
-                  onPressed: () {}, icon: Icon(Icons.qr_code_scanner)),
+                  onPressed: () => _onPressScan(),
+                  icon: Icon(Icons.qr_code_scanner)),
             ],
           ),
           Expanded(
             child: ListView.separated(
                 separatorBuilder: (context, index) => SizedBox(height: 5),
-                itemCount: 15,
+                itemCount: notifier.listOrderItem.length,
                 itemBuilder: (context, index) {
-                  return _itemOrderLayout(context);
+                  final item = notifier.listOrderItem[index];
+                  return _itemOrderLayout(context, item);
                 }),
           ),
           Row(
             children: [
               Expanded(
                   child: Text(
-                '2 Item',
+                '${notifier.totalProduct} Item',
                 style: GlobalHelper.getTextTheme(context,
                     appTextStyle: AppTextStyle.TITLE_MEDIUM),
               )),
               SizedBox(width: 5),
-              FilledButton(onPressed: () {}, child: Text('Simpan'))
+              FilledButton(
+                  onPressed: () => _onPressSave(context), child: Text('Simpan'))
             ],
           )
         ],
@@ -58,7 +71,7 @@ class AddProductOrderScreen
     ));
   }
 
-  _itemOrderLayout(BuildContext context) {
+  _itemOrderLayout(BuildContext context, ProductItemOrderEntity item) {
     return Container(
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
@@ -69,10 +82,10 @@ class AddProductOrderScreen
           Row(
             children: [
               Expanded(
-                  child: Text('nama_produk',
+                  child: Text(item.name,
                       style: GlobalHelper.getTextTheme(context,
                           appTextStyle: AppTextStyle.BODY_MEDIUM))),
-              Text('Rp. 5000',
+              Text(NumberHelper.formatIdr(item.price),
                   style: GlobalHelper.getTextTheme(context,
                           appTextStyle: AppTextStyle.BODY_LARGE)
                       ?.copyWith(
@@ -83,12 +96,16 @@ class AddProductOrderScreen
           Row(
             children: [
               Text(
-                'Stok: 50',
+                'Stok: ${item.stock}',
                 style: GlobalHelper.getTextTheme(context,
                     appTextStyle: AppTextStyle.BODY_MEDIUM),
               ),
               Expanded(child: SizedBox()),
-              IconButton.outlined(onPressed: () {}, icon: Icon(Icons.remove)),
+              IconButton.outlined(
+                  onPressed: (item.quantity > 0)
+                      ? () => _onPressRemoveQuantity(item)
+                      : null,
+                  icon: Icon(Icons.remove)),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                 decoration: BoxDecoration(
@@ -97,13 +114,17 @@ class AddProductOrderScreen
                         width: 0.5),
                     borderRadius: BorderRadius.circular(4)),
                 child: Text(
-                  '1',
+                  item.quantity.toString(),
                   style: GlobalHelper.getTextTheme(context,
                       appTextStyle: AppTextStyle.BODY_MEDIUM),
                 ),
               ),
               IconButton.outlined(
-                onPressed: () {},
+                onPressed: (item.stock != null &&
+                        item.stock! > 0 &&
+                        item.stock! > item.quantity)
+                    ? () => _onPressAddQuantity(item)
+                    : null,
                 icon: Icon(Icons.add),
               )
             ],
@@ -111,5 +132,29 @@ class AddProductOrderScreen
         ],
       ),
     );
+  }
+
+  _onPressAddQuantity(ProductItemOrderEntity item) {
+    notifier.updateQuantity(item, item.quantity + 1);
+  }
+
+  _onPressRemoveQuantity(ProductItemOrderEntity item) {
+    notifier.updateQuantity(item, item.quantity - 1);
+  }
+
+  _onPressSave(BuildContext context) {
+    Navigator.pop(context, notifier.listOrderItemFilteredQuantity);
+  }
+
+  _onSubmitSearch() {
+    notifier.submitSearch();
+  }
+
+  _onPressClearSearch() {
+    notifier.clearSearch();
+  }
+
+  _onPressScan() {
+    notifier.scan();
   }
 }

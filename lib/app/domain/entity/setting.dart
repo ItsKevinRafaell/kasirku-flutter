@@ -6,9 +6,9 @@ part 'setting.freezed.dart';
 @freezed
 sealed class Setting with _$Setting {
   const factory Setting.entity({
-    required String shop,
-    required String address,
-    required String phone,
+    String? shop,
+    String? address,
+    String? phone,
   }) = SettingEntity;
 
   factory Setting.fromJson(Map<String, dynamic> json) =>

@@ -31,7 +31,9 @@ Product _$ProductFromJson(Map<String, dynamic> json) {
 mixin _$Product {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  int? get stock => throw _privateConstructorUsedError;
   int get price => throw _privateConstructorUsedError;
+  String? get barcode => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -48,7 +50,9 @@ mixin _$Product {
             @JsonKey(name: 'product_id') int id,
             @JsonKey(name: 'product_name') String name,
             int quantity,
-            @JsonKey(name: 'unit_price') int price)
+            @JsonKey(name: 'unit_price') int price,
+            String? barcode,
+            int? stock)
         itemOrderEntity,
   }) =>
       throw _privateConstructorUsedError;
@@ -68,7 +72,9 @@ mixin _$Product {
             @JsonKey(name: 'product_id') int id,
             @JsonKey(name: 'product_name') String name,
             int quantity,
-            @JsonKey(name: 'unit_price') int price)?
+            @JsonKey(name: 'unit_price') int price,
+            String? barcode,
+            int? stock)?
         itemOrderEntity,
   }) =>
       throw _privateConstructorUsedError;
@@ -88,7 +94,9 @@ mixin _$Product {
             @JsonKey(name: 'product_id') int id,
             @JsonKey(name: 'product_name') String name,
             int quantity,
-            @JsonKey(name: 'unit_price') int price)?
+            @JsonKey(name: 'unit_price') int price,
+            String? barcode,
+            int? stock)?
         itemOrderEntity,
     required TResult orElse(),
   }) =>
@@ -127,7 +135,7 @@ abstract class $ProductCopyWith<$Res> {
   factory $ProductCopyWith(Product value, $Res Function(Product) then) =
       _$ProductCopyWithImpl<$Res, Product>;
   @useResult
-  $Res call({int id, String name, int price});
+  $Res call({int id, String name, int stock, int price, String? barcode});
 }
 
 /// @nodoc
@@ -147,7 +155,9 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
   $Res call({
     Object? id = null,
     Object? name = null,
+    Object? stock = null,
     Object? price = null,
+    Object? barcode = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -158,10 +168,18 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      stock: null == stock
+          ? _value.stock!
+          : stock // ignore: cast_nullable_to_non_nullable
+              as int,
       price: null == price
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as int,
+      barcode: freezed == barcode
+          ? _value.barcode
+          : barcode // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -338,7 +356,9 @@ class _$ProductEntityImpl implements ProductEntity {
             @JsonKey(name: 'product_id') int id,
             @JsonKey(name: 'product_name') String name,
             int quantity,
-            @JsonKey(name: 'unit_price') int price)
+            @JsonKey(name: 'unit_price') int price,
+            String? barcode,
+            int? stock)
         itemOrderEntity,
   }) {
     return entity(
@@ -362,7 +382,9 @@ class _$ProductEntityImpl implements ProductEntity {
             @JsonKey(name: 'product_id') int id,
             @JsonKey(name: 'product_name') String name,
             int quantity,
-            @JsonKey(name: 'unit_price') int price)?
+            @JsonKey(name: 'unit_price') int price,
+            String? barcode,
+            int? stock)?
         itemOrderEntity,
   }) {
     return entity?.call(
@@ -386,7 +408,9 @@ class _$ProductEntityImpl implements ProductEntity {
             @JsonKey(name: 'product_id') int id,
             @JsonKey(name: 'product_name') String name,
             int quantity,
-            @JsonKey(name: 'unit_price') int price)?
+            @JsonKey(name: 'unit_price') int price,
+            String? barcode,
+            int? stock)?
         itemOrderEntity,
     required TResult orElse(),
   }) {
@@ -456,6 +480,7 @@ abstract class ProductEntity implements Product {
   int get categoryId;
   @override
   String get name;
+  @override
   int get stock;
   @override
   int get price;
@@ -463,6 +488,7 @@ abstract class ProductEntity implements Product {
   bool get isActive;
   @JsonKey(name: 'image_url')
   String? get imageUrl;
+  @override
   String? get barcode;
 
   /// Create a copy of Product
@@ -486,7 +512,9 @@ abstract class _$$ProductItemOrderEntityImplCopyWith<$Res>
       {@JsonKey(name: 'product_id') int id,
       @JsonKey(name: 'product_name') String name,
       int quantity,
-      @JsonKey(name: 'unit_price') int price});
+      @JsonKey(name: 'unit_price') int price,
+      String? barcode,
+      int? stock});
 }
 
 /// @nodoc
@@ -507,6 +535,8 @@ class __$$ProductItemOrderEntityImplCopyWithImpl<$Res>
     Object? name = null,
     Object? quantity = null,
     Object? price = null,
+    Object? barcode = freezed,
+    Object? stock = freezed,
   }) {
     return _then(_$ProductItemOrderEntityImpl(
       id: null == id
@@ -525,6 +555,14 @@ class __$$ProductItemOrderEntityImplCopyWithImpl<$Res>
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as int,
+      barcode: freezed == barcode
+          ? _value.barcode
+          : barcode // ignore: cast_nullable_to_non_nullable
+              as String?,
+      stock: freezed == stock
+          ? _value.stock
+          : stock // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -537,6 +575,8 @@ class _$ProductItemOrderEntityImpl implements ProductItemOrderEntity {
       @JsonKey(name: 'product_name') required this.name,
       required this.quantity,
       @JsonKey(name: 'unit_price') required this.price,
+      this.barcode,
+      this.stock,
       final String? $type})
       : $type = $type ?? 'itemOrderEntity';
 
@@ -554,13 +594,17 @@ class _$ProductItemOrderEntityImpl implements ProductItemOrderEntity {
   @override
   @JsonKey(name: 'unit_price')
   final int price;
+  @override
+  final String? barcode;
+  @override
+  final int? stock;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'Product.itemOrderEntity(id: $id, name: $name, quantity: $quantity, price: $price)';
+    return 'Product.itemOrderEntity(id: $id, name: $name, quantity: $quantity, price: $price, barcode: $barcode, stock: $stock)';
   }
 
   @override
@@ -572,12 +616,15 @@ class _$ProductItemOrderEntityImpl implements ProductItemOrderEntity {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.quantity, quantity) ||
                 other.quantity == quantity) &&
-            (identical(other.price, price) || other.price == price));
+            (identical(other.price, price) || other.price == price) &&
+            (identical(other.barcode, barcode) || other.barcode == barcode) &&
+            (identical(other.stock, stock) || other.stock == stock));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, quantity, price);
+  int get hashCode =>
+      Object.hash(runtimeType, id, name, quantity, price, barcode, stock);
 
   /// Create a copy of Product
   /// with the given fields replaced by the non-null parameter values.
@@ -605,10 +652,12 @@ class _$ProductItemOrderEntityImpl implements ProductItemOrderEntity {
             @JsonKey(name: 'product_id') int id,
             @JsonKey(name: 'product_name') String name,
             int quantity,
-            @JsonKey(name: 'unit_price') int price)
+            @JsonKey(name: 'unit_price') int price,
+            String? barcode,
+            int? stock)
         itemOrderEntity,
   }) {
-    return itemOrderEntity(id, name, quantity, price);
+    return itemOrderEntity(id, name, quantity, price, barcode, stock);
   }
 
   @override
@@ -628,10 +677,12 @@ class _$ProductItemOrderEntityImpl implements ProductItemOrderEntity {
             @JsonKey(name: 'product_id') int id,
             @JsonKey(name: 'product_name') String name,
             int quantity,
-            @JsonKey(name: 'unit_price') int price)?
+            @JsonKey(name: 'unit_price') int price,
+            String? barcode,
+            int? stock)?
         itemOrderEntity,
   }) {
-    return itemOrderEntity?.call(id, name, quantity, price);
+    return itemOrderEntity?.call(id, name, quantity, price, barcode, stock);
   }
 
   @override
@@ -651,12 +702,14 @@ class _$ProductItemOrderEntityImpl implements ProductItemOrderEntity {
             @JsonKey(name: 'product_id') int id,
             @JsonKey(name: 'product_name') String name,
             int quantity,
-            @JsonKey(name: 'unit_price') int price)?
+            @JsonKey(name: 'unit_price') int price,
+            String? barcode,
+            int? stock)?
         itemOrderEntity,
     required TResult orElse(),
   }) {
     if (itemOrderEntity != null) {
-      return itemOrderEntity(id, name, quantity, price);
+      return itemOrderEntity(id, name, quantity, price, barcode, stock);
     }
     return orElse();
   }
@@ -702,11 +755,12 @@ class _$ProductItemOrderEntityImpl implements ProductItemOrderEntity {
 
 abstract class ProductItemOrderEntity implements Product {
   const factory ProductItemOrderEntity(
-          {@JsonKey(name: 'product_id') required final int id,
-          @JsonKey(name: 'product_name') required final String name,
-          required final int quantity,
-          @JsonKey(name: 'unit_price') required final int price}) =
-      _$ProductItemOrderEntityImpl;
+      {@JsonKey(name: 'product_id') required final int id,
+      @JsonKey(name: 'product_name') required final String name,
+      required final int quantity,
+      @JsonKey(name: 'unit_price') required final int price,
+      final String? barcode,
+      final int? stock}) = _$ProductItemOrderEntityImpl;
 
   factory ProductItemOrderEntity.fromJson(Map<String, dynamic> json) =
       _$ProductItemOrderEntityImpl.fromJson;
@@ -721,6 +775,10 @@ abstract class ProductItemOrderEntity implements Product {
   @override
   @JsonKey(name: 'unit_price')
   int get price;
+  @override
+  String? get barcode;
+  @override
+  int? get stock;
 
   /// Create a copy of Product
   /// with the given fields replaced by the non-null parameter values.

@@ -2,13 +2,19 @@ import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:kasirku_flutter/app/data/repository/auth_repository.dart';
 import 'package:kasirku_flutter/app/data/repository/order_repository.dart';
+import 'package:kasirku_flutter/app/data/repository/product_repository.dart';
 import 'package:kasirku_flutter/app/data/source/auth_api_service.dart';
 import 'package:kasirku_flutter/app/data/source/order_api_service.dart';
+import 'package:kasirku_flutter/app/data/source/product_api_service.dart';
+import 'package:kasirku_flutter/app/domain/entity/product.dart';
 import 'package:kasirku_flutter/app/domain/repository/auth_repository.dart';
 import 'package:kasirku_flutter/app/domain/repository/order_repository.dart';
+import 'package:kasirku_flutter/app/domain/repository/product_repository.dart';
 import 'package:kasirku_flutter/app/domain/usecase/auth_login.dart';
 import 'package:kasirku_flutter/app/domain/usecase/order_get_all.dart';
 import 'package:kasirku_flutter/app/domain/usecase/order_get_today.dart';
+import 'package:kasirku_flutter/app/domain/usecase/product_get_all.dart';
+import 'package:kasirku_flutter/app/domain/usecase/product_get_by_barcode.dart';
 import 'package:kasirku_flutter/app/presentation/add_product_order/add_product_order_notifier.dart';
 import 'package:kasirku_flutter/app/presentation/checkout/checkout_notifier.dart';
 import 'package:kasirku_flutter/app/presentation/home/home_notifier.dart';
@@ -38,15 +44,20 @@ void initDependency() {
   //api service
   sl.registerSingleton<AuthApiService>(AuthApiService(sl()));
   sl.registerSingleton<OrderApiService>(OrderApiService(sl()));
+  sl.registerSingleton<ProductApiService>(ProductApiService(sl()));
 
   //repository
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl(sl()));
   sl.registerSingleton<OrderRepository>(OrderRepositoryImpl(sl()));
+  sl.registerSingleton<ProductRepository>(ProductRepositoryImpl(sl()));
 
   //use case
   sl.registerSingleton<AuthLoginUseCase>(AuthLoginUseCase(sl()));
   sl.registerSingleton<OrderGetTodayUseCase>(OrderGetTodayUseCase(sl()));
   sl.registerSingleton<OrderGetAllUseCase>(OrderGetAllUseCase(sl()));
+  sl.registerSingleton<ProductGetAllUseCase>(ProductGetAllUseCase(sl()));
+  sl.registerSingleton<ProductGetByBarcodeUseCase>(
+      ProductGetByBarcodeUseCase(sl()));
 
   //presentation
   sl.registerFactoryParam<LoginNotifier, void, void>(
@@ -59,10 +70,10 @@ void initDependency() {
       (param1, param2) => OrderNotifier(sl()));
 
   sl.registerFactoryParam<InputOrderNotifier, void, void>(
-      (param1, param2) => InputOrderNotifier());
+      (param1, param2) => InputOrderNotifier(sl()));
 
-  sl.registerFactoryParam<AddProductOrderNotifier, void, void>(
-      (param1, param2) => AddProductOrderNotifier());
+  sl.registerFactoryParam<AddProductOrderNotifier, List<ProductItemOrderEntity>,
+      void>((param1, param2) => AddProductOrderNotifier(param1, sl()));
 
   sl.registerFactoryParam<CheckoutNotifier, void, void>(
       (param1, param2) => CheckoutNotifier());
