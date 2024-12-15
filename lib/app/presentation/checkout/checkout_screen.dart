@@ -143,7 +143,7 @@ class CheckoutScreen extends AppWidget<CheckoutNotifier, OrderEntity, void> {
             expandedInsets: EdgeInsets.symmetric(horizontal: 1),
             label: Text('Metode Pembayaran'),
             dropdownMenuEntries: notifier.listDropdownPaymentMethod,
-            initialSelection: notifier.selectedPaymentMethod,
+            initialSelection: notifier.initialPaymentMethod,
             controller: notifier.methodController,
           ),
           SizedBox(height: 5),

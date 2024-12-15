@@ -42,7 +42,8 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
                 ),
               ),
               IconButton.outlined(
-                  onPressed: () => _onPressBarcode(),
+                  onPressed: () {},
+                  // onPressed: () => _onPressBarcode(),
                   icon: Icon(Icons.qr_code_scanner)),
               IconButton.filled(
                   onPressed: () => _onPressAddOrder(context),
@@ -227,7 +228,10 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
 
   _onPressCheckout(BuildContext context) async {
     await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CheckoutScreen()));
+        context,
+        MaterialPageRoute(
+          builder: (context) => CheckoutScreen(param1: notifier.order),
+        ));
     notifier.init();
   }
 
@@ -247,7 +251,11 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
     notifier.updateQuantity(item, item.quantity + 1);
   }
 
-  _onPressBarcode() {
-    notifier.scan();
-  }
+  // _onPressScan(BuildContext context) {
+  //   QrBarCodeScannerDialog().getScannedQrBarCode(
+  //       context: context,
+  //       onCode: (code) {
+  //         notifier.scan(code ?? '');
+  //       });
+  // }
 }

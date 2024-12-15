@@ -34,7 +34,7 @@ class _PaymentMethodApiService implements PaymentMethodApiService {
     )
         .compose(
           _dio.options,
-          'api/payment-methods',
+          '/api/payment-methods',
           queryParameters: queryParameters,
           data: _data,
         )

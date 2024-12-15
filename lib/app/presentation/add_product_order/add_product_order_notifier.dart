@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:kasirku_flutter/app/domain/entity/product.dart';
 import 'package:kasirku_flutter/app/domain/usecase/product_get_all.dart';
 import 'package:kasirku_flutter/core/provider/app_provider.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+// import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class AddProductOrderNotifier extends AppProvider {
   final ProductGetAllUseCase _productGetAllUseCase;
@@ -15,9 +15,9 @@ class AddProductOrderNotifier extends AppProvider {
 
   TextEditingController _searchController = TextEditingController();
 
-  TextEditingController get searchController => _searchController;
-
   List<ProductItemOrderEntity> _listOrderItem = [];
+
+  TextEditingController get searchController => _searchController;
 
   List<ProductItemOrderEntity> get listOrderItem {
     if (_searchController.text.isEmpty)
@@ -37,42 +37,61 @@ class AddProductOrderNotifier extends AppProvider {
   }
 
   List<ProductItemOrderEntity> get listOrderItemFilteredQuantity {
-    return _listOrderItem.where((item) => item.quantity > 0).toList();
+    return _listOrderItem
+        .where(
+          (element) => element.quantity > 0,
+        )
+        .toList();
   }
 
   int get totalProduct {
     int totalTemp = 0;
-    _listOrderItem.forEach((element) => totalTemp += element.quantity);
+    _listOrderItem.forEach(
+      (element) => totalTemp += element.quantity,
+    );
     return totalTemp;
   }
 
   @override
-  init() async {
-    await _getProduct();
+  init() {
+    _getProduct();
   }
 
   _getProduct() async {
     showLoading();
     final response = await _productGetAllUseCase();
     if (response.success) {
-      final _listProductActive =
-          response.data!.where((element) => element.isActive).toList();
+      final listProductActive = response.data!
+          .where(
+            (element) => element.isActive,
+          )
+          .toList();
       _listOrderItem =
-          List<ProductItemOrderEntity>.from(_listProductActive.map((item) {
-        final int index =
-            _listOrderOld.indexWhere((element) => element.id == item.id);
+          List<ProductItemOrderEntity>.from(listProductActive.map((item) {
+        final int index = _listOrderOld.indexWhere(
+          (element) => element.id == item.id,
+        );
         return ProductItemOrderEntity(
             id: item.id,
             name: item.name,
             quantity: (index > -1) ? _listOrderOld[index].quantity : 0,
             price: item.price,
-            stock: item.stock,
-            barcode: item.barcode);
+            barcode: item.barcode,
+            stock: item.stock);
       }));
     } else {
       errorMessage = response.message;
     }
     hideLoading();
+  }
+
+  submitSearch() {
+    notifyListeners();
+  }
+
+  clearSearch() {
+    _searchController.text = '';
+    notifyListeners();
   }
 
   updateQuantity(ProductItemOrderEntity item, int newQuantity) {
@@ -84,35 +103,16 @@ class AddProductOrderNotifier extends AppProvider {
     notifyListeners();
   }
 
-  submitSearch() {
-    notifyListeners();
-  }
-
-  clearSearch() {
-    _searchController.clear();
-    notifyListeners();
-  }
-
-  scan() async {
-    try {
-      final barcodeText = await FlutterBarcodeScanner.scanBarcode(
-          '#000000', 'Batal', true, ScanMode.BARCODE);
-      if (barcodeText != '-1') {
-        _searchController.text = barcodeText;
-        _updateQuantityFromBarcode(barcodeText);
-      } else {
-        snackBarMessage = 'Scan barcode dibatalkan';
-      }
-    } on PlatformException {
-      snackBarMessage = 'Error scan barcode';
-    }
-
+  scan(String barcodeText) async {
+    _searchController.text = barcodeText;
+    _updateQuantityFromBarcode(barcodeText);
     notifyListeners();
   }
 
   _updateQuantityFromBarcode(String param) {
-    final index =
-        _listOrderItem.indexWhere((element) => element.barcode == param);
+    final index = _listOrderItem.indexWhere(
+      (element) => element.barcode == param,
+    );
     if (index >= 0) {
       final item = _listOrderItem[index];
       if (item.stock != null &&
@@ -121,7 +121,7 @@ class AddProductOrderNotifier extends AppProvider {
         _listOrderItem[index] = item.copyWith(quantity: item.quantity + 1);
       } else {
         snackBarMessage =
-            'Stok produk ${item.name} (#${item.barcode}) sudah habis';
+            'Stok produk ${item.name} (#${item.barcode}) tidak mencukupi';
       }
     } else {
       snackBarMessage = 'Produk (#${param}) tidak ditemukan';

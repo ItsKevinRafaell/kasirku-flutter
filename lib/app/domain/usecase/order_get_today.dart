@@ -17,7 +17,7 @@ class OrderGetTodayUseCase
       final listFiltered = response.data!
           .where((element) =>
               DateTimeHelper.formatDateTimeFromString(
-                  dateTimeString: element.updatedAt) ==
+                  dateTimeString: element.updatedAt!) ==
               DateTimeHelper.formatDateTime(dateTime: now))
           .take(10)
           .toList();

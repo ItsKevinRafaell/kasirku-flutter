@@ -34,7 +34,7 @@ class _SettingApiService implements SettingApiService {
     )
         .compose(
           _dio.options,
-          'api/setting',
+          '/api/setting',
           queryParameters: queryParameters,
           data: _data,
         )

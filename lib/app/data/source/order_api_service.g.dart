@@ -34,7 +34,7 @@ class _OrderApiService implements OrderApiService {
     )
         .compose(
           _dio.options,
-          'api/orders',
+          '/api/orders',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -68,7 +68,7 @@ class _OrderApiService implements OrderApiService {
     )
         .compose(
           _dio.options,
-          'api/orders/${id}',
+          '/api/orders/${id}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -104,7 +104,7 @@ class _OrderApiService implements OrderApiService {
     )
         .compose(
           _dio.options,
-          'api/orders',
+          '/api/orders',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -142,7 +142,7 @@ class _OrderApiService implements OrderApiService {
     )
         .compose(
           _dio.options,
-          'api/orders/${id}',
+          '/api/orders/${id}',
           queryParameters: queryParameters,
           data: _data,
         )

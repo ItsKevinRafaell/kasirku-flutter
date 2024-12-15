@@ -31,15 +31,15 @@ class LoginNotifier extends AppProvider {
   }
 
   _getBaseUrl() async {
+    showLoading();
     final baseUrlPref = await SharedPreferencesHelper.getString(PREF_BASE_URL);
     if (baseUrlPref == null) {
-      _baseUrlController.text = 'https://kasir.dewakoding.com';
+      _baseUrlController.text = 'https://kasir.dewakoding.com'; // Default URL
       await SharedPreferencesHelper.setString(
           PREF_BASE_URL, _baseUrlController.text);
     } else {
       _baseUrlController.text = baseUrlPref;
     }
-
     hideLoading();
   }
 

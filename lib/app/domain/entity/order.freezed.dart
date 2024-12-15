@@ -38,7 +38,7 @@ mixin _$Order {
   @JsonKey(name: 'payment_method')
   PaymentMethodEntity? get paymentMethod => throw _privateConstructorUsedError;
   @JsonKey(name: 'updated_at')
-  String get updatedAt => throw _privateConstructorUsedError;
+  String? get updatedAt => throw _privateConstructorUsedError;
   List<ProductItemOrderEntity> get items => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -55,7 +55,7 @@ mixin _$Order {
             @JsonKey(name: 'paid_amount') int? paidAmount,
             @JsonKey(name: 'change_amount') int? changeAmount,
             @JsonKey(name: 'payment_method') PaymentMethodEntity? paymentMethod,
-            @JsonKey(name: 'updated_at') String updatedAt,
+            @JsonKey(name: 'updated_at') String? updatedAt,
             List<ProductItemOrderEntity> items)
         entity,
   }) =>
@@ -75,7 +75,7 @@ mixin _$Order {
             @JsonKey(name: 'paid_amount') int? paidAmount,
             @JsonKey(name: 'change_amount') int? changeAmount,
             @JsonKey(name: 'payment_method') PaymentMethodEntity? paymentMethod,
-            @JsonKey(name: 'updated_at') String updatedAt,
+            @JsonKey(name: 'updated_at') String? updatedAt,
             List<ProductItemOrderEntity> items)?
         entity,
   }) =>
@@ -95,7 +95,7 @@ mixin _$Order {
             @JsonKey(name: 'paid_amount') int? paidAmount,
             @JsonKey(name: 'change_amount') int? changeAmount,
             @JsonKey(name: 'payment_method') PaymentMethodEntity? paymentMethod,
-            @JsonKey(name: 'updated_at') String updatedAt,
+            @JsonKey(name: 'updated_at') String? updatedAt,
             List<ProductItemOrderEntity> items)?
         entity,
     required TResult orElse(),
@@ -145,7 +145,7 @@ abstract class $OrderCopyWith<$Res> {
       @JsonKey(name: 'paid_amount') int? paidAmount,
       @JsonKey(name: 'change_amount') int? changeAmount,
       @JsonKey(name: 'payment_method') PaymentMethodEntity? paymentMethod,
-      @JsonKey(name: 'updated_at') String updatedAt,
+      @JsonKey(name: 'updated_at') String? updatedAt,
       List<ProductItemOrderEntity> items});
 }
 
@@ -176,7 +176,7 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
     Object? paidAmount = freezed,
     Object? changeAmount = freezed,
     Object? paymentMethod = freezed,
-    Object? updatedAt = null,
+    Object? updatedAt = freezed,
     Object? items = null,
   }) {
     return _then(_value.copyWith(
@@ -228,10 +228,10 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
           ? _value.paymentMethod
           : paymentMethod // ignore: cast_nullable_to_non_nullable
               as PaymentMethodEntity?,
-      updatedAt: null == updatedAt
+      updatedAt: freezed == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       items: null == items
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
@@ -261,7 +261,7 @@ abstract class _$$OrderEntityImplCopyWith<$Res>
       @JsonKey(name: 'paid_amount') int? paidAmount,
       @JsonKey(name: 'change_amount') int? changeAmount,
       @JsonKey(name: 'payment_method') PaymentMethodEntity? paymentMethod,
-      @JsonKey(name: 'updated_at') String updatedAt,
+      @JsonKey(name: 'updated_at') String? updatedAt,
       List<ProductItemOrderEntity> items});
 }
 
@@ -290,7 +290,7 @@ class __$$OrderEntityImplCopyWithImpl<$Res>
     Object? paidAmount = freezed,
     Object? changeAmount = freezed,
     Object? paymentMethod = freezed,
-    Object? updatedAt = null,
+    Object? updatedAt = freezed,
     Object? items = null,
   }) {
     return _then(_$OrderEntityImpl(
@@ -342,10 +342,10 @@ class __$$OrderEntityImplCopyWithImpl<$Res>
           ? _value.paymentMethod
           : paymentMethod // ignore: cast_nullable_to_non_nullable
               as PaymentMethodEntity?,
-      updatedAt: null == updatedAt
+      updatedAt: freezed == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       items: null == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
@@ -370,7 +370,7 @@ class _$OrderEntityImpl implements OrderEntity {
       @JsonKey(name: 'paid_amount') this.paidAmount,
       @JsonKey(name: 'change_amount') this.changeAmount,
       @JsonKey(name: 'payment_method') this.paymentMethod,
-      @JsonKey(name: 'updated_at') required this.updatedAt,
+      @JsonKey(name: 'updated_at') this.updatedAt,
       required final List<ProductItemOrderEntity> items})
       : _items = items;
 
@@ -408,7 +408,7 @@ class _$OrderEntityImpl implements OrderEntity {
   final PaymentMethodEntity? paymentMethod;
   @override
   @JsonKey(name: 'updated_at')
-  final String updatedAt;
+  final String? updatedAt;
   final List<ProductItemOrderEntity> _items;
   @override
   List<ProductItemOrderEntity> get items {
@@ -493,7 +493,7 @@ class _$OrderEntityImpl implements OrderEntity {
             @JsonKey(name: 'paid_amount') int? paidAmount,
             @JsonKey(name: 'change_amount') int? changeAmount,
             @JsonKey(name: 'payment_method') PaymentMethodEntity? paymentMethod,
-            @JsonKey(name: 'updated_at') String updatedAt,
+            @JsonKey(name: 'updated_at') String? updatedAt,
             List<ProductItemOrderEntity> items)
         entity,
   }) {
@@ -530,7 +530,7 @@ class _$OrderEntityImpl implements OrderEntity {
             @JsonKey(name: 'paid_amount') int? paidAmount,
             @JsonKey(name: 'change_amount') int? changeAmount,
             @JsonKey(name: 'payment_method') PaymentMethodEntity? paymentMethod,
-            @JsonKey(name: 'updated_at') String updatedAt,
+            @JsonKey(name: 'updated_at') String? updatedAt,
             List<ProductItemOrderEntity> items)?
         entity,
   }) {
@@ -567,7 +567,7 @@ class _$OrderEntityImpl implements OrderEntity {
             @JsonKey(name: 'paid_amount') int? paidAmount,
             @JsonKey(name: 'change_amount') int? changeAmount,
             @JsonKey(name: 'payment_method') PaymentMethodEntity? paymentMethod,
-            @JsonKey(name: 'updated_at') String updatedAt,
+            @JsonKey(name: 'updated_at') String? updatedAt,
             List<ProductItemOrderEntity> items)?
         entity,
     required TResult orElse(),
@@ -642,7 +642,7 @@ abstract class OrderEntity implements Order {
       @JsonKey(name: 'paid_amount') final int? paidAmount,
       @JsonKey(name: 'change_amount') final int? changeAmount,
       @JsonKey(name: 'payment_method') final PaymentMethodEntity? paymentMethod,
-      @JsonKey(name: 'updated_at') required final String updatedAt,
+      @JsonKey(name: 'updated_at') final String? updatedAt,
       required final List<ProductItemOrderEntity> items}) = _$OrderEntityImpl;
 
   factory OrderEntity.fromJson(Map<String, dynamic> json) =
@@ -679,7 +679,7 @@ abstract class OrderEntity implements Order {
   PaymentMethodEntity? get paymentMethod;
   @override
   @JsonKey(name: 'updated_at')
-  String get updatedAt;
+  String? get updatedAt;
   @override
   List<ProductItemOrderEntity> get items;
 

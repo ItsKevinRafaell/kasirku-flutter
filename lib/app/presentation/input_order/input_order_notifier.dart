@@ -2,10 +2,11 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kasirku_flutter/app/domain/entity/order.dart';
 import 'package:kasirku_flutter/app/domain/entity/product.dart';
 import 'package:kasirku_flutter/app/domain/usecase/product_get_by_barcode.dart';
 import 'package:kasirku_flutter/core/provider/app_provider.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+// import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class InputOrderNotifier extends AppProvider {
   final ProductGetByBarcodeUseCase _productGetByBarcodeUseCase;
@@ -19,18 +20,17 @@ class InputOrderNotifier extends AppProvider {
   bool _isShowCustomer = true;
   HashMap<String, String> _errorCustomer = HashMap();
   List<ProductItemOrderEntity> _listOrderItem = [];
-
   final List<DropdownMenuEntry<String>> _genderListDropdown = [
     DropdownMenuEntry<String>(value: 'male', label: 'Laki-laki'),
-    DropdownMenuEntry<String>(value: 'female', label: 'Perempuan'),
+    DropdownMenuEntry<String>(value: 'female', label: 'Perempuan')
   ];
 
   TextEditingController _nameController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _genderController = TextEditingController();
-  TextEditingController _birthdayController = TextEditingController();
   TextEditingController _notesController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _birthdayController = TextEditingController();
 
   bool get isShowCustomer => _isShowCustomer;
   HashMap<String, String> get errorCustomer => _errorCustomer;
@@ -38,11 +38,30 @@ class InputOrderNotifier extends AppProvider {
   List<DropdownMenuEntry<String>> get genderListDropdown => _genderListDropdown;
 
   TextEditingController get nameController => _nameController;
-  TextEditingController get phoneController => _phoneController;
   TextEditingController get emailController => _emailController;
   TextEditingController get genderController => _genderController;
-  TextEditingController get birthdayController => _birthdayController;
   TextEditingController get notesController => _notesController;
+  TextEditingController get phoneController => _phoneController;
+  TextEditingController get birthdayController => _birthdayController;
+
+  OrderEntity get order {
+    final genderValue = (_genderController.text.isNotEmpty)
+        ? _genderListDropdown
+            .where(
+              (element) => element.label == _genderController.text,
+            )
+            .first
+            .value
+        : '';
+    return OrderEntity(
+        name: _nameController.text,
+        gender: genderValue,
+        email: _emailController.text,
+        phone: _phoneController.text,
+        birthday: _birthdayController.text,
+        notes: _notesController.text,
+        items: _listOrderItem);
+  }
 
   set isShowCustomer(bool param) => _isShowCustomer = param;
 
@@ -52,18 +71,16 @@ class InputOrderNotifier extends AppProvider {
   validateCustomer() {
     showLoading();
     _errorCustomer.clear();
-    if (_nameController.text.isEmpty) {
-      _errorCustomer[NAME] = 'Nama harus diisi';
-    }
-    if (_genderController.text.isEmpty) {
-      _errorCustomer[GENDER] = 'Jenis kelamin harus diisi';
-    }
+    if (_nameController.text.isEmpty)
+      _errorCustomer[NAME] = 'Nama harus terisi';
+    if (_genderController.text.isEmpty)
+      _errorCustomer[GENDER] = 'Gender harus terisi';
     hideLoading();
   }
 
-  updateItems(List<ProductItemOrderEntity> items) {
+  updateItems(List<ProductItemOrderEntity> param) {
     _listOrderItem.clear();
-    _listOrderItem.addAll(items);
+    _listOrderItem.addAll(param);
     notifyListeners();
   }
 
@@ -78,29 +95,18 @@ class InputOrderNotifier extends AppProvider {
     notifyListeners();
   }
 
-  scan() async {
-    try {
-      final barcodeText = await FlutterBarcodeScanner.scanBarcode(
-          '#000000', 'Batal', true, ScanMode.BARCODE);
-      if (barcodeText != '-1') {
-        _getProductByBarcode(barcodeText);
-      } else {
-        snackBarMessage = 'Scan barcode dibatalkan';
-      }
-    } on PlatformException {
-      snackBarMessage = 'Error scan barcode';
-    }
-
-    notifyListeners();
+  scan(String barcodeText) async {
+    _getProductByBarcode(barcodeText);
   }
 
   _getProductByBarcode(String param) async {
     showLoading();
-    final response = await _productGetByBarcodeUseCase.call(param: param);
-    if (response.success) {
-      final product = response.data!;
-      final index =
-          _listOrderItem.indexWhere((element) => element.id == product.id);
+    final respone = await _productGetByBarcodeUseCase(param: param);
+    if (respone.success) {
+      final product = respone.data!;
+      final index = _listOrderItem.indexWhere(
+        (element) => element.id == product.id,
+      );
       if (index >= 0) {
         final item = _listOrderItem[index];
         if (item.stock != null &&
@@ -109,7 +115,7 @@ class InputOrderNotifier extends AppProvider {
           _listOrderItem[index] = item.copyWith(quantity: item.quantity + 1);
         } else {
           snackBarMessage =
-              'Stok produk ${item.name} (#${item.barcode}) sudah habis';
+              'Stok produk ${item.name} (#${item.barcode}) tidak mencukupi';
         }
       } else {
         if (product.stock > 0) {
@@ -126,7 +132,7 @@ class InputOrderNotifier extends AppProvider {
         }
       }
     } else {
-      snackBarMessage = response.message;
+      snackBarMessage = respone.message;
     }
     hideLoading();
   }

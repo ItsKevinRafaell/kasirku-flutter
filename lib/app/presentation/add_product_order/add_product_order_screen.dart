@@ -40,7 +40,8 @@ class AddProductOrderScreen extends AppWidget<AddProductOrderNotifier,
                       ),
                       onSubmitted: (value) => _onSubmitSearch())),
               IconButton.outlined(
-                  onPressed: () => _onPressScan(),
+                  onPressed: () {},
+                  // onPressed: () => _onPressScan(),
                   icon: Icon(Icons.qr_code_scanner)),
             ],
           ),
@@ -154,7 +155,11 @@ class AddProductOrderScreen extends AppWidget<AddProductOrderNotifier,
     notifier.clearSearch();
   }
 
-  _onPressScan() {
-    notifier.scan();
-  }
+  // _onPressScan(BuildContext context) {
+  //   QrBarCodeScannerDialog().getScannedQrBarCode(
+  //       context: context,
+  //       onCode: (code) {
+  //         notifier.scan(code ?? '');
+  //       });
+  // }
 }

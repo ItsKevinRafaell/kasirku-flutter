@@ -1,56 +1,115 @@
 import 'package:flutter/material.dart';
 import 'package:kasirku_flutter/app/domain/entity/order.dart';
+import 'package:kasirku_flutter/app/domain/usecase/order_send.dart';
 import 'package:kasirku_flutter/app/domain/usecase/payment_method_get_all.dart';
 import 'package:kasirku_flutter/core/provider/app_provider.dart';
 
 class CheckoutNotifier extends AppProvider {
-  final OrderEntity _order;
+  OrderEntity _order;
   final PaymentMethodGetAllUseCase _paymentMethodGetAllUseCase;
+  final OrderSendUseCase _orderSendUseCase;
 
-  CheckoutNotifier(this._order, this._paymentMethodGetAllUseCase) {
+  CheckoutNotifier(
+      this._order, this._paymentMethodGetAllUseCase, this._orderSendUseCase) {
     init();
   }
 
   static const String MALE = 'male';
   static const String FEMALE = 'female';
 
+  bool _isSuccess = false;
+
   List<DropdownMenuEntry<int>> _listDropdownPaymentMethod = [];
-  int _selectedPaymentMethod = -1;
+  int _initialPaymentMethod = -1;
 
   TextEditingController _totalController = TextEditingController();
+
   TextEditingController _methodController = TextEditingController();
+
   TextEditingController _amountController = TextEditingController();
+
   TextEditingController _changeController = TextEditingController();
 
-  TextEditingController get totalController => _totalController;
-  TextEditingController get methodController => _methodController;
-  TextEditingController get amountController => _amountController;
-  TextEditingController get changeController => _changeController;
+  OrderEntity get order => _order;
 
-  int get selectedPaymentMethod => _selectedPaymentMethod;
+  bool get isSuccess => _isSuccess;
 
   List<DropdownMenuEntry<int>> get listDropdownPaymentMethod =>
       _listDropdownPaymentMethod;
+  int get initialPaymentMethod => _initialPaymentMethod;
 
-  OrderEntity get order => _order;
+  TextEditingController get totalController => _totalController;
+
+  TextEditingController get methodController => _methodController;
+
+  TextEditingController get amountController => _amountController;
+
+  TextEditingController get changeController => _changeController;
+
   @override
-  init() {
-    _getPaymentMethod();
+  init() async {
+    await _getPaymentMethod();
+    await _updateValuePayment();
   }
 
   _getPaymentMethod() async {
     showLoading();
     final response = await _paymentMethodGetAllUseCase();
     if (response.success) {
-      _listDropdownPaymentMethod = List<DropdownMenuEntry<int>>.from(response
-          .data!
-          .map((e) => DropdownMenuEntry<int>(value: e.id, label: e.name)));
-      _selectedPaymentMethod = response.data!.first.id;
-      hideLoading();
+      _listDropdownPaymentMethod = List<DropdownMenuEntry<int>>.from(
+              response.data!.map((item) =>
+                  DropdownMenuEntry<int>(value: item.id, label: item.name)))
+          .toList();
+      _initialPaymentMethod = response.data!.first.id;
+    } else {
+      errorMessage = response.message;
     }
+
+    hideLoading();
+  }
+
+  _updateValuePayment() {
+    int tempTotal = 0;
+    _order.items.forEach(
+      (element) => tempTotal += element.quantity * element.price,
+    );
+    _totalController.text = tempTotal.toString();
+    _amountController.text = '0';
+    updateChangeAmount();
+  }
+
+  updateChangeAmount() {
+    _changeController.text =
+        (int.parse(_amountController.text) - int.parse(_totalController.text))
+            .toString();
+    notifyListeners();
   }
 
   send() async {
     showLoading();
+    if (_amountController.text.isEmpty)
+      snackBarMessage = 'Nominal bayar harus diisi';
+    else {
+      final int paymentMethodValue = (_methodController.text.isNotEmpty)
+          ? _listDropdownPaymentMethod
+              .where(
+                (element) => element.label == _methodController.text,
+              )
+              .first
+              .value
+          : 0;
+      _order = _order.copyWith(
+          totalPrice: int.parse(_totalController.text),
+          paymentMethodId: paymentMethodValue,
+          paidAmount: int.parse(_amountController.text),
+          changeAmount: int.parse(_changeController.text));
+      final response = await _orderSendUseCase(param: _order);
+      if (response.success) {
+        _isSuccess = true;
+      } else {
+        snackBarMessage = response.message;
+      }
+    }
+    hideLoading();
   }
 }

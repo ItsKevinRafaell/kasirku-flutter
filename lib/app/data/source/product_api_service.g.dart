@@ -34,7 +34,7 @@ class _ProductApiService implements ProductApiService {
     )
         .compose(
           _dio.options,
-          'api/products',
+          '/api/products',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -69,7 +69,7 @@ class _ProductApiService implements ProductApiService {
     )
         .compose(
           _dio.options,
-          'api/products/barcode/{barcode}',
+          '/api/products/barcode/{barcode}',
           queryParameters: queryParameters,
           data: _data,
         )
