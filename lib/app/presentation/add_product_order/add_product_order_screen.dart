@@ -6,6 +6,7 @@ import 'package:kasirku_flutter/app/presentation/add_product_order/add_product_o
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
 import 'package:kasirku_flutter/core/helper/number_helper.dart';
 import 'package:kasirku_flutter/core/widget/app_widget.dart';
+import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 
 class AddProductOrderScreen extends AppWidget<AddProductOrderNotifier,
     List<ProductItemOrderEntity>, void> {
@@ -40,8 +41,8 @@ class AddProductOrderScreen extends AppWidget<AddProductOrderNotifier,
                       ),
                       onSubmitted: (value) => _onSubmitSearch())),
               IconButton.outlined(
-                  onPressed: () {},
-                  // onPressed: () => _onPressScan(),
+                  // onPressed: () {},
+                  onPressed: () => _onPressScan(context),
                   icon: Icon(Icons.qr_code_scanner)),
             ],
           ),
@@ -155,11 +156,11 @@ class AddProductOrderScreen extends AppWidget<AddProductOrderNotifier,
     notifier.clearSearch();
   }
 
-  // _onPressScan(BuildContext context) {
-  //   QrBarCodeScannerDialog().getScannedQrBarCode(
-  //       context: context,
-  //       onCode: (code) {
-  //         notifier.scan(code ?? '');
-  //       });
-  // }
+  _onPressScan(BuildContext context) {
+    QrBarCodeScannerDialog().getScannedQrBarCode(
+        context: context,
+        onCode: (code) {
+          notifier.scan(code ?? '');
+        });
+  }
 }

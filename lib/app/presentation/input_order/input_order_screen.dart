@@ -9,6 +9,7 @@ import 'package:kasirku_flutter/core/helper/dialog_helper.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
 import 'package:kasirku_flutter/core/helper/number_helper.dart';
 import 'package:kasirku_flutter/core/widget/app_widget.dart';
+import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 
 class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
   @override
@@ -42,8 +43,8 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
                 ),
               ),
               IconButton.outlined(
-                  onPressed: () {},
-                  // onPressed: () => _onPressBarcode(),
+                  // onPressed: () {},
+                  onPressed: () => _onPressBarcode(context),
                   icon: Icon(Icons.qr_code_scanner)),
               IconButton.filled(
                   onPressed: () => _onPressAddOrder(context),
@@ -251,11 +252,11 @@ class InputOrderScreen extends AppWidget<InputOrderNotifier, void, void> {
     notifier.updateQuantity(item, item.quantity + 1);
   }
 
-  // _onPressScan(BuildContext context) {
-  //   QrBarCodeScannerDialog().getScannedQrBarCode(
-  //       context: context,
-  //       onCode: (code) {
-  //         notifier.scan(code ?? '');
-  //       });
-  // }
+  _onPressBarcode(BuildContext context) {
+    QrBarCodeScannerDialog().getScannedQrBarCode(
+        context: context,
+        onCode: (code) {
+          notifier.scan(code ?? '');
+        });
+  }
 }
