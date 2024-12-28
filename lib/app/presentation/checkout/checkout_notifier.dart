@@ -105,6 +105,7 @@ class CheckoutNotifier extends AppProvider {
           changeAmount: int.parse(_changeController.text));
       final response = await _orderSendUseCase(param: _order);
       if (response.success) {
+        _order = _order.copyWith(id: response.data);
         _isSuccess = true;
       } else {
         snackBarMessage = response.message;

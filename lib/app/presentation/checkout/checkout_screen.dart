@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kasirku_flutter/app/domain/entity/order.dart';
 import 'package:kasirku_flutter/app/domain/entity/product.dart';
 import 'package:kasirku_flutter/app/presentation/checkout/checkout_notifier.dart';
-import 'package:kasirku_flutter/app/presentation/print/print_screen.dart';
+import 'package:kasirku_flutter/app/presentation/detail_order/detail_order_screen.dart';
 import 'package:kasirku_flutter/core/helper/date_time_helper.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
 import 'package:kasirku_flutter/core/helper/number_helper.dart';
@@ -134,6 +134,7 @@ class CheckoutScreen extends AppWidget<CheckoutNotifier, OrderEntity, void> {
           TextField(
             controller: notifier.totalController,
             keyboardType: TextInputType.number,
+            readOnly: true,
             decoration: const InputDecoration(
                 label: Text('Total Pembayaran'), border: OutlineInputBorder()),
           ),
@@ -151,10 +152,13 @@ class CheckoutScreen extends AppWidget<CheckoutNotifier, OrderEntity, void> {
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
                 label: Text('Nominal Bayar'), border: OutlineInputBorder()),
+            onSubmitted: (value) => _updateChangeAmount(),
+            onTap: () => _updateChangeAmount(),
           ),
           const SizedBox(height: 5),
           TextField(
             controller: notifier.changeController,
+            readOnly: true,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
                 label: Text('Kembalian'), border: OutlineInputBorder()),
@@ -223,7 +227,22 @@ class CheckoutScreen extends AppWidget<CheckoutNotifier, OrderEntity, void> {
   }
 
   _onPressSend(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => PrintScreen()));
+    notifier.send();
+  }
+
+  @override
+  checkVariable(BuildContext context) async {
+    if (notifier.isSuccess) {
+      await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  DetailOrderScreen(param1: notifier.order.id)));
+      Navigator.pop(context, true);
+    }
+  }
+
+  _updateChangeAmount() {
+    notifier.updateChangeAmount();
   }
 }

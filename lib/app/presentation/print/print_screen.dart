@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kasirku_flutter/app/domain/entity/order.dart';
 import 'package:kasirku_flutter/app/presentation/print/print_notifier.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
 import 'package:kasirku_flutter/core/widget/app_widget.dart';
 
-class PrintScreen extends AppWidget<PrintNotifier, void, void> {
-  PrintScreen({super.key});
+class PrintScreen extends AppWidget<PrintNotifier, OrderEntity, void> {
+  PrintScreen({required super.param1});
 
   @override
   AppBar? appBarBuild(BuildContext context) {

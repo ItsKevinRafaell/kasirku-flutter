@@ -19,6 +19,7 @@ import 'package:kasirku_flutter/app/domain/repository/product_repository.dart';
 import 'package:kasirku_flutter/app/domain/repository/setting_repository.dart';
 import 'package:kasirku_flutter/app/domain/usecase/auth_login.dart';
 import 'package:kasirku_flutter/app/domain/usecase/order_get_all.dart';
+import 'package:kasirku_flutter/app/domain/usecase/order_get_by_id.dart';
 import 'package:kasirku_flutter/app/domain/usecase/order_get_today.dart';
 import 'package:kasirku_flutter/app/domain/usecase/order_send.dart';
 import 'package:kasirku_flutter/app/domain/usecase/payment_method_get_all.dart';
@@ -27,6 +28,7 @@ import 'package:kasirku_flutter/app/domain/usecase/product_get_by_barcode.dart';
 import 'package:kasirku_flutter/app/domain/usecase/setting_get.dart';
 import 'package:kasirku_flutter/app/presentation/add_product_order/add_product_order_notifier.dart';
 import 'package:kasirku_flutter/app/presentation/checkout/checkout_notifier.dart';
+import 'package:kasirku_flutter/app/presentation/detail_order/detail_order_notifier.dart';
 import 'package:kasirku_flutter/app/presentation/home/home_notifier.dart';
 import 'package:kasirku_flutter/app/presentation/input_order/input_order_notifier.dart';
 import 'package:kasirku_flutter/app/presentation/login/login_notifier.dart';
@@ -78,6 +80,7 @@ void initDependency() {
   sl.registerSingleton<PaymentMethodGetAllUseCase>(
       PaymentMethodGetAllUseCase(sl()));
   sl.registerSingleton<SettingGetUseCase>(SettingGetUseCase(sl()));
+  sl.registerSingleton<OrderGetByIdUseCase>(OrderGetByIdUseCase(sl()));
 
   //presentation
   sl.registerFactoryParam<LoginNotifier, void, void>(
@@ -107,5 +110,8 @@ void initDependency() {
   );
   sl.registerFactoryParam<ProductNotifier, void, void>(
     (param1, param2) => ProductNotifier(sl()),
+  );
+  sl.registerFactoryParam<DetailOrderNotifier, int, void>(
+    (param1, param2) => DetailOrderNotifier(param1, sl()),
   );
 }

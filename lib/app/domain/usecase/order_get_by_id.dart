@@ -3,12 +3,14 @@ import 'package:kasirku_flutter/app/domain/repository/order_repository.dart';
 import 'package:kasirku_flutter/core/network/data_state.dart';
 import 'package:kasirku_flutter/core/use_case/app_use_case.dart';
 
-class OrderSendUseCase extends AppUseCase<Future<DataState<int>>, OrderEntity> {
+class OrderGetByIdUseCase
+    extends AppUseCase<Future<DataState<OrderEntity>>, int> {
   final OrderRepository _orderRepository;
 
-  OrderSendUseCase(this._orderRepository);
+  OrderGetByIdUseCase(this._orderRepository);
+
   @override
-  Future<DataState<int>> call({OrderEntity? param}) {
-    return _orderRepository.insert(param!);
+  Future<DataState<OrderEntity>> call({int? param}) async {
+    return _orderRepository.getById(param!);
   }
 }
