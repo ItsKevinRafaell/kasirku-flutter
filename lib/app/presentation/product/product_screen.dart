@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kasirku_flutter/app/domain/entity/product.dart';
 import 'package:kasirku_flutter/app/presentation/product/product_notifier.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
 import 'package:kasirku_flutter/core/helper/number_helper.dart';
@@ -18,24 +19,28 @@ class ProductScreen extends AppWidget<ProductNotifier, void, void> {
   @override
   Widget bodyBuild(BuildContext context) {
     return SafeArea(
-        child: ListView.separated(
-            separatorBuilder: (context, index) => Container(
-                  height: 3,
-                  color: GlobalHelper.getColorSchema(context).outline,
-                ),
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return _itemLayout(context);
-            }));
+        child: RefreshIndicator(
+      onRefresh: () => notifier.init(),
+      child: ListView.separated(
+          separatorBuilder: (context, index) => Container(
+                height: 3,
+                color: GlobalHelper.getColorSchema(context).outline,
+              ),
+          itemCount: notifier.listProduct.length,
+          itemBuilder: (context, index) {
+            final item = notifier.listProduct[index];
+            return _itemLayout(context, item);
+          }),
+    ));
   }
 
-  _itemLayout(BuildContext context) {
+  _itemLayout(BuildContext context, ProductEntity item) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Row(
         children: [
-          const ImageNetworkAppWidget(
-            imageUrl: '',
+          ImageNetworkAppWidget(
+            imageUrl: item.imageUrl ?? '',
             width: 50,
             height: 50,
           ),
@@ -45,13 +50,13 @@ class ProductScreen extends AppWidget<ProductNotifier, void, void> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'nama_product',
+                  item.name,
                   style: GlobalHelper.getTextTheme(context,
                       appTextStyle: AppTextStyle.TITLE_SMALL),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  NumberHelper.formatIdr(20000),
+                  NumberHelper.formatIdr(item.price),
                   style: GlobalHelper.getTextTheme(context,
                       appTextStyle: AppTextStyle.BODY_LARGE),
                 ),
@@ -60,15 +65,17 @@ class ProductScreen extends AppWidget<ProductNotifier, void, void> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Stok : 23',
+                      'Stok : ${item.stock}',
                       style: GlobalHelper.getTextTheme(context,
                           appTextStyle: AppTextStyle.LABEL_MEDIUM),
                     ),
                     Text(
-                      'Active',
+                      (item.isActive) ? 'Aktif' : 'Tidak Aktif',
                       style: GlobalHelper.getTextTheme(context,
                               appTextStyle: AppTextStyle.LABEL_MEDIUM)
-                          ?.copyWith(color: Colors.green),
+                          ?.copyWith(
+                              color:
+                                  (item.isActive) ? Colors.green : Colors.red),
                     )
                   ],
                 )

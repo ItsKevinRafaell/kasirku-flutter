@@ -106,6 +106,6 @@ void initDependency() {
     (param1, param2) => ProfilNotifier(),
   );
   sl.registerFactoryParam<ProductNotifier, void, void>(
-    (param1, param2) => ProductNotifier(),
+    (param1, param2) => ProductNotifier(sl()),
   );
 }
