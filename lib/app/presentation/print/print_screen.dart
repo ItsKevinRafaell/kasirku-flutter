@@ -3,6 +3,7 @@ import 'package:kasirku_flutter/app/domain/entity/order.dart';
 import 'package:kasirku_flutter/app/presentation/print/print_notifier.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
 import 'package:kasirku_flutter/core/widget/app_widget.dart';
+import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 
 class PrintScreen extends AppWidget<PrintNotifier, OrderEntity, void> {
   PrintScreen({required super.param1});
@@ -47,15 +48,16 @@ class PrintScreen extends AppWidget<PrintNotifier, OrderEntity, void> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             separatorBuilder: (context, index) => const SizedBox(height: 10),
-            itemCount: 3,
+            itemCount: notifier.listBluetooth.length,
             itemBuilder: (context, index) {
-              return _itemDeviceLayout(context);
+              final item = notifier.listBluetooth[index];
+              return _itemDeviceLayout(context, item);
             })
       ],
     );
   }
 
-  _itemDeviceLayout(BuildContext context) {
+  _itemDeviceLayout(BuildContext context, BluetoothInfo item) {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -67,15 +69,20 @@ class PrintScreen extends AppWidget<PrintNotifier, OrderEntity, void> {
         children: [
           const Icon(Icons.bluetooth_connected),
           const SizedBox(width: 10),
-          const Expanded(
+          Expanded(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Text('name'), Text('mac address')],
+            children: [Text('${item.name}'), Text('${item.macAdress}')],
           )),
           const SizedBox(width: 5),
-          FilledButton(onPressed: () {}, child: const Text('Cetak'))
+          FilledButton(
+              onPressed: () => _onPressPrint(item), child: const Text('Cetak'))
         ],
       ),
     );
+  }
+
+  _onPressPrint(BluetoothInfo item) {
+    notifier.print(item.macAdress);
   }
 }
