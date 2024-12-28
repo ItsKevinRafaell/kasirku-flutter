@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:kasirku_flutter/app/domain/entity/order.dart';
 import 'package:kasirku_flutter/app/presentation/input_order/input_order_screen.dart';
 import 'package:kasirku_flutter/app/presentation/order/order_notifier.dart';
@@ -9,13 +8,15 @@ import 'package:kasirku_flutter/core/helper/number_helper.dart';
 import 'package:kasirku_flutter/core/widget/app_widget.dart';
 
 class OrderScreen extends AppWidget<OrderNotifier, void, void> {
+  OrderScreen({super.key});
+
   @override
   Widget bodyBuild(BuildContext context) {
     return SafeArea(
         child: RefreshIndicator(
             onRefresh: () => notifier.init(),
             child: ListView.separated(
-                separatorBuilder: (context, index) => SizedBox(
+                separatorBuilder: (context, index) => const SizedBox(
                       height: 5,
                     ),
                 itemCount: notifier.listOrder.length,
@@ -28,19 +29,19 @@ class OrderScreen extends AppWidget<OrderNotifier, void, void> {
 
   @override
   AppBar? appBarBuild(BuildContext context) {
-    return AppBar(title: Text('Order'));
+    return AppBar(title: const Text('Order'));
   }
 
   @override
   Widget? floatingActionButtonBuild(BuildContext context) {
     return FloatingActionButton(
-        onPressed: () => _onPressAddOrder(context), child: Icon(Icons.add));
+        onPressed: () => _onPressAddOrder(context), child: const Icon(Icons.add));
   }
 
   _itemOrderLayout(BuildContext context, OrderEntity item) {
     return Container(
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(color: Colors.white),
+        padding: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(color: Colors.white),
         child: Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,7 +63,7 @@ class OrderScreen extends AppWidget<OrderNotifier, void, void> {
                               GlobalHelper.getColorSchema(context).secondary)),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Row(
@@ -76,19 +77,19 @@ class OrderScreen extends AppWidget<OrderNotifier, void, void> {
                           color: GlobalHelper.getColorSchema(context).primary,
                           fontWeight: FontWeight.bold)),
               Container(
-                  padding: EdgeInsets.symmetric(horizontal: 3, vertical: 2),
-                  child: Text(item.paymentMethod!.name,
-                      style: GlobalHelper.getTextTheme(context,
-                              appTextStyle: AppTextStyle.BODY_SMALL)
-                          ?.copyWith(
-                              color: GlobalHelper.getColorSchema(context)
-                                  .secondary)),
+                  padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 2),
                   decoration: BoxDecoration(
                       border: Border.all(
                           width: 1,
                           color:
                               GlobalHelper.getColorSchema(context).secondary),
-                      borderRadius: BorderRadius.circular(5)))
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(item.paymentMethod!.name,
+                      style: GlobalHelper.getTextTheme(context,
+                              appTextStyle: AppTextStyle.BODY_SMALL)
+                          ?.copyWith(
+                              color: GlobalHelper.getColorSchema(context)
+                                  .secondary)))
             ],
           )
         ]));

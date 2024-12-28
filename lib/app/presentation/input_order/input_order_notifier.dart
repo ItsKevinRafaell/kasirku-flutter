@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:kasirku_flutter/app/domain/entity/order.dart';
 import 'package:kasirku_flutter/app/domain/entity/product.dart';
 import 'package:kasirku_flutter/app/domain/usecase/product_get_by_barcode.dart';
@@ -18,19 +17,19 @@ class InputOrderNotifier extends AppProvider {
   static const String GENDER = 'GENDER';
 
   bool _isShowCustomer = true;
-  HashMap<String, String> _errorCustomer = HashMap();
-  List<ProductItemOrderEntity> _listOrderItem = [];
+  final HashMap<String, String> _errorCustomer = HashMap();
+  final List<ProductItemOrderEntity> _listOrderItem = [];
   final List<DropdownMenuEntry<String>> _genderListDropdown = [
-    DropdownMenuEntry<String>(value: 'male', label: 'Laki-laki'),
-    DropdownMenuEntry<String>(value: 'female', label: 'Perempuan')
+    const DropdownMenuEntry<String>(value: 'male', label: 'Laki-laki'),
+    const DropdownMenuEntry<String>(value: 'female', label: 'Perempuan')
   ];
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _genderController = TextEditingController();
-  TextEditingController _notesController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _birthdayController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _genderController = TextEditingController();
+  final TextEditingController _notesController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _birthdayController = TextEditingController();
 
   bool get isShowCustomer => _isShowCustomer;
   HashMap<String, String> get errorCustomer => _errorCustomer;
@@ -71,10 +70,12 @@ class InputOrderNotifier extends AppProvider {
   validateCustomer() {
     showLoading();
     _errorCustomer.clear();
-    if (_nameController.text.isEmpty)
+    if (_nameController.text.isEmpty) {
       _errorCustomer[NAME] = 'Nama harus terisi';
-    if (_genderController.text.isEmpty)
+    }
+    if (_genderController.text.isEmpty) {
       _errorCustomer[GENDER] = 'Gender harus terisi';
+    }
     hideLoading();
   }
 

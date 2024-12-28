@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kasirku_flutter/app/presentation/login/login_screen.dart';
 import 'package:kasirku_flutter/core/di/dependency.dart';
-import 'package:kasirku_flutter/core/widget/error_app_widget.dart';
-import 'package:kasirku_flutter/core/widget/loading_app_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

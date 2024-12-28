@@ -4,7 +4,6 @@ import 'package:kasirku_flutter/app/domain/usecase/auth_login.dart';
 import 'package:kasirku_flutter/core/constant/constant.dart';
 import 'package:kasirku_flutter/core/helper/shared_preferences_helper.dart';
 import 'package:kasirku_flutter/core/provider/app_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginNotifier extends AppProvider {
   final AuthLoginUseCase _authLoginUseCase;
@@ -14,9 +13,9 @@ class LoginNotifier extends AppProvider {
 
   bool _isLogged = false;
 
-  TextEditingController _baseUrlController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _baseUrlController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   bool get isLogged => _isLogged;
 

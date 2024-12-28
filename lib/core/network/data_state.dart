@@ -16,8 +16,8 @@ class DataState<T> extends BaseResponse {
 }
 
 class SuccessState<T> extends DataState<T> {
-  SuccessState({T? data, String message = 'Success'})
-      : super(success: true, message: message, data: data);
+  SuccessState({super.data, super.message = 'Success'})
+      : super(success: true);
 }
 
 class ErrorState<T> extends DataState<T> {

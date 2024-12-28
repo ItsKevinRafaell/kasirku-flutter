@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/app_bar.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:kasirku_flutter/app/domain/entity/product.dart';
 import 'package:kasirku_flutter/app/presentation/add_product_order/add_product_order_notifier.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
@@ -10,12 +8,12 @@ import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 
 class AddProductOrderScreen extends AppWidget<AddProductOrderNotifier,
     List<ProductItemOrderEntity>, void> {
-  AddProductOrderScreen({required super.param1});
+  AddProductOrderScreen({super.key, required super.param1});
 
   @override
   AppBar? appBarBuild(BuildContext context) {
     return AppBar(
-      title: Text('Tambah produk'),
+      title: const Text('Tambah produk'),
     );
   }
 
@@ -33,22 +31,22 @@ class AddProductOrderScreen extends AppWidget<AddProductOrderNotifier,
                       controller: notifier.searchController,
                       decoration: InputDecoration(
                         hintText: 'Tuliskan nama atau barcode produk',
-                        label: Text('Cari Produk'),
-                        border: OutlineInputBorder(),
+                        label: const Text('Cari Produk'),
+                        border: const OutlineInputBorder(),
                         suffixIcon: IconButton(
                             onPressed: () => _onPressClearSearch(),
-                            icon: Icon(Icons.clear)),
+                            icon: const Icon(Icons.clear)),
                       ),
                       onSubmitted: (value) => _onSubmitSearch())),
               IconButton.outlined(
                   // onPressed: () {},
                   onPressed: () => _onPressScan(context),
-                  icon: Icon(Icons.qr_code_scanner)),
+                  icon: const Icon(Icons.qr_code_scanner)),
             ],
           ),
           Expanded(
             child: ListView.separated(
-                separatorBuilder: (context, index) => SizedBox(height: 5),
+                separatorBuilder: (context, index) => const SizedBox(height: 5),
                 itemCount: notifier.listOrderItem.length,
                 itemBuilder: (context, index) {
                   final item = notifier.listOrderItem[index];
@@ -63,9 +61,10 @@ class AddProductOrderScreen extends AppWidget<AddProductOrderNotifier,
                 style: GlobalHelper.getTextTheme(context,
                     appTextStyle: AppTextStyle.TITLE_MEDIUM),
               )),
-              SizedBox(width: 5),
+              const SizedBox(width: 5),
               FilledButton(
-                  onPressed: () => _onPressSave(context), child: Text('Simpan'))
+                  onPressed: () => _onPressSave(context),
+                  child: const Text('Simpan'))
             ],
           )
         ],
@@ -75,7 +74,7 @@ class AddProductOrderScreen extends AppWidget<AddProductOrderNotifier,
 
   _itemOrderLayout(BuildContext context, ProductItemOrderEntity item) {
     return Container(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
           color: GlobalHelper.getColorSchema(context).surfaceContainer,
           borderRadius: BorderRadius.circular(10)),
@@ -102,14 +101,14 @@ class AddProductOrderScreen extends AppWidget<AddProductOrderNotifier,
                 style: GlobalHelper.getTextTheme(context,
                     appTextStyle: AppTextStyle.BODY_MEDIUM),
               ),
-              Expanded(child: SizedBox()),
+              const Expanded(child: SizedBox()),
               IconButton.outlined(
                   onPressed: (item.quantity > 0)
                       ? () => _onPressRemoveQuantity(item)
                       : null,
-                  icon: Icon(Icons.remove)),
+                  icon: const Icon(Icons.remove)),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                 decoration: BoxDecoration(
                     border: Border.all(
                         color: GlobalHelper.getColorSchema(context).shadow,
@@ -127,7 +126,7 @@ class AddProductOrderScreen extends AppWidget<AddProductOrderNotifier,
                         item.stock! > item.quantity)
                     ? () => _onPressAddQuantity(item)
                     : null,
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
               )
             ],
           )

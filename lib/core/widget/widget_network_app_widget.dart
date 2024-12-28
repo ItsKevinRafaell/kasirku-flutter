@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
 
@@ -38,7 +37,7 @@ class ImageNetworkAppWidget extends StatelessWidget {
         height: height,
         width: width,
         color: GlobalHelper.getColorSchema(context).surfaceContainer,
-        child: Center(
+        child: const Center(
           child: Icon(
             Icons.image_not_supported,
             color: Colors.white,

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/app_bar.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:kasirku_flutter/app/presentation/login/login_screen.dart';
+import 'package:kasirku_flutter/app/presentation/product/product_screen.dart';
 import 'package:kasirku_flutter/app/presentation/profil/profil_notifier.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
 import 'package:kasirku_flutter/core/widget/app_widget.dart';
 
 class ProfilScreen extends AppWidget<ProfilNotifier, void, void> {
+  ProfilScreen({super.key});
+
   @override
   AppBar? appBarBuild(BuildContext context) {
     return AppBar();
@@ -16,15 +17,21 @@ class ProfilScreen extends AppWidget<ProfilNotifier, void, void> {
   Widget bodyBuild(BuildContext context) {
     return SafeArea(
         child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Column(
               children: [
                 _headerLayout(context),
-                Container(
+                SizedBox(
+                  width: double.maxFinite,
+                  child: FilledButton(
+                      onPressed: () => _onPressProduct(context),
+                      child: const Text('Product')),
+                ),
+                SizedBox(
                     width: double.maxFinite,
                     child: ElevatedButton(
                         onPressed: () => _onPressLogout(),
-                        child: Text('Logout')))
+                        child: const Text('Logout')))
               ],
             )));
   }
@@ -32,7 +39,7 @@ class ProfilScreen extends AppWidget<ProfilNotifier, void, void> {
   _headerLayout(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         CircleAvatar(
@@ -45,20 +52,20 @@ class ProfilScreen extends AppWidget<ProfilNotifier, void, void> {
                       fontWeight: FontWeight.bold,
                       color: GlobalHelper.getColorSchema(context).onPrimary)),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Text(notifier.name,
             style: GlobalHelper.getTextTheme(context,
                     appTextStyle: AppTextStyle.TITLE_LARGE)
                 ?.copyWith(
                     color: GlobalHelper.getColorSchema(context).primary,
                     fontWeight: FontWeight.bold)),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Text(notifier.email,
             style: GlobalHelper.getTextTheme(context,
                     appTextStyle: AppTextStyle.BODY_SMALL)
                 ?.copyWith(
                     color: GlobalHelper.getColorSchema(context).secondary)),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
       ],
     );
   }
@@ -75,5 +82,10 @@ class ProfilScreen extends AppWidget<ProfilNotifier, void, void> {
           MaterialPageRoute(builder: (context) => LoginScreen()),
           (route) => false);
     }
+  }
+
+  _onPressProduct(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ProductScreen()));
   }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:kasirku_flutter/app/domain/entity/order.dart';
 import 'package:kasirku_flutter/app/domain/entity/setting.dart';
 import 'package:kasirku_flutter/app/domain/usecase/setting_get.dart';
@@ -80,79 +79,80 @@ class PrintNotifier extends AppProvider {
     final Generator ticket =
         Generator(PaperSize.mm58, await CapabilityProfile.load());
     List<int> bytes = [];
-    if (_settingStore?.shop?.isNotEmpty ?? false)
+    if (_settingStore?.shop?.isNotEmpty ?? false) {
       bytes += ticket.text(_settingStore?.shop ?? '-',
-          styles: PosStyles(
+          styles: const PosStyles(
               align: PosAlign.center,
               height: PosTextSize.size2,
               width: PosTextSize.size2));
-    if (_settingStore?.address?.isNotEmpty ?? false)
+    }
+    if (_settingStore?.address?.isNotEmpty ?? false) {
       bytes += ticket.text(_settingStore?.address ?? '-',
-          styles: PosStyles(align: PosAlign.center));
+          styles: const PosStyles(align: PosAlign.center));
+    }
 
-    if (_settingStore?.phone?.isNotEmpty ?? false)
+    if (_settingStore?.phone?.isNotEmpty ?? false) {
       bytes += ticket.text('Telp : ${_settingStore?.phone ?? '-'}',
-          styles: PosStyles(align: PosAlign.center));
+          styles: const PosStyles(align: PosAlign.center));
+    }
     bytes += ticket.feed(1);
-    bytes += ticket.text(date, styles: PosStyles(align: PosAlign.center));
+    bytes += ticket.text(date, styles: const PosStyles(align: PosAlign.center));
 
     bytes += ticket.feed(2);
     bytes += ticket.hr(ch: '=');
     bytes += ticket.text('Produk yang dipesan',
-        styles: PosStyles(align: PosAlign.center));
+        styles: const PosStyles(align: PosAlign.center));
     bytes += ticket.hr(ch: '=');
-    _orderEntity.items.forEach(
-      (element) {
-        bytes += ticket.text('${element.name}', styles: PosStyles());
+    for (var element in _orderEntity.items) {
+        bytes += ticket.text(element.name, styles: const PosStyles());
         bytes += ticket.row([
           PosColumn(text: '', width: 4),
           PosColumn(
               text: NumberHelper.formatIdr(element.price),
               width: 3,
-              styles: PosStyles(align: PosAlign.right)),
+              styles: const PosStyles(align: PosAlign.right)),
           PosColumn(
               text: '${element.quantity}',
               width: 2,
-              styles: PosStyles(align: PosAlign.right)),
+              styles: const PosStyles(align: PosAlign.right)),
           PosColumn(
               text: NumberHelper.formatIdr(element.price * element.quantity),
               width: 3,
-              styles: PosStyles(align: PosAlign.right)),
+              styles: const PosStyles(align: PosAlign.right)),
         ]);
-      },
-    );
+      }
 
     bytes += ticket.hr();
     bytes += ticket.row([
       PosColumn(
-          text: 'TOTAL', width: 6, styles: PosStyles(align: PosAlign.right)),
+          text: 'TOTAL', width: 6, styles: const PosStyles(align: PosAlign.right)),
       PosColumn(
           text: NumberHelper.formatIdr(_orderEntity.totalPrice!),
           width: 6,
-          styles: PosStyles(align: PosAlign.right)),
+          styles: const PosStyles(align: PosAlign.right)),
     ]);
     bytes += ticket.hr(ch: '=');
     bytes += ticket.row([
       PosColumn(
-          text: 'Paid', width: 6, styles: PosStyles(align: PosAlign.right)),
+          text: 'Paid', width: 6, styles: const PosStyles(align: PosAlign.right)),
       PosColumn(
           text: NumberHelper.formatIdr(_orderEntity.paidAmount!),
           width: 6,
-          styles: PosStyles(align: PosAlign.right)),
+          styles: const PosStyles(align: PosAlign.right)),
     ]);
 
     bytes += ticket.row([
       PosColumn(
-          text: 'Change', width: 6, styles: PosStyles(align: PosAlign.right)),
+          text: 'Change', width: 6, styles: const PosStyles(align: PosAlign.right)),
       PosColumn(
           text: NumberHelper.formatIdr(_orderEntity.changeAmount!),
           width: 6,
-          styles: PosStyles(align: PosAlign.right)),
+          styles: const PosStyles(align: PosAlign.right)),
     ]);
 
     bytes += ticket.feed(2);
     bytes +=
-        ticket.text('Terima kasih', styles: PosStyles(align: PosAlign.center));
+        ticket.text('Terima kasih', styles: const PosStyles(align: PosAlign.center));
     ticket.feed(2);
     return bytes;
   }

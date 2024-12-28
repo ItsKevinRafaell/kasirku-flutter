@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class LoadingAppWidget extends StatelessWidget {
@@ -6,8 +5,8 @@ class LoadingAppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
+    return const Center(
+      child: SizedBox(
           width: 150, height: 150, child: CircularProgressIndicator()),
     );
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:kasirku_flutter/app/presentation/home/home_screen.dart';
 import 'package:kasirku_flutter/app/presentation/login/login_notifier.dart';
 import 'package:kasirku_flutter/core/helper/dialog_helper.dart';
@@ -7,18 +6,20 @@ import 'package:kasirku_flutter/core/helper/global_helper.dart';
 import 'package:kasirku_flutter/core/widget/app_widget.dart';
 
 class LoginScreen extends AppWidget<LoginNotifier, void, void> {
+  LoginScreen({super.key});
+
   @override
   Widget bodyBuild(BuildContext context) {
     return SafeArea(
         child: Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         children: [
           Container(
               alignment: Alignment.centerRight,
               child: IconButton(
                   onPressed: () => _onPressUrlButton(context),
-                  icon: Icon(Icons.link))),
+                  icon: const Icon(Icons.link))),
           Expanded(
               child: Center(
             child: Text('Login',
@@ -27,23 +28,23 @@ class LoginScreen extends AppWidget<LoginNotifier, void, void> {
           )),
           TextField(
             controller: notifier.emailController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 label: Text('Email'), border: OutlineInputBorder()),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           TextField(
             controller: notifier.passwordController,
             obscureText: true,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 label: Text('Password'), border: OutlineInputBorder()),
           ),
-          SizedBox(height: 10),
-          Container(
+          const SizedBox(height: 10),
+          SizedBox(
               width: double.maxFinite,
               child: FilledButton(
                   onPressed: () => _onPressLogin(context),
-                  child: Text('Login'))),
-          SizedBox(height: 50),
+                  child: const Text('Login'))),
+          const SizedBox(height: 50),
         ],
       ),
     ));
@@ -68,14 +69,14 @@ class LoginScreen extends AppWidget<LoginNotifier, void, void> {
           children: [
             TextField(
                 controller: notifier.baseUrlController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     label: Text('Base URL'), border: OutlineInputBorder())),
-            SizedBox(height: 10),
-            Container(
+            const SizedBox(height: 10),
+            SizedBox(
               width: double.maxFinite,
               child: FilledButton(
                   onPressed: () => _onPressSaveBaseUrl(context),
-                  child: Text('Simpan')),
+                  child: const Text('Simpan')),
             )
           ],
         ));
