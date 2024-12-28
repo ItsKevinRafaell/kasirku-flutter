@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:kasirku_flutter/app/domain/entity/order.dart';
 import 'package:kasirku_flutter/app/domain/entity/product.dart';
 import 'package:kasirku_flutter/app/presentation/checkout/checkout_notifier.dart';
-import 'package:kasirku_flutter/app/presentation/print/print_screen.dart';
+import 'package:kasirku_flutter/app/presentation/detail_order/detail_order_screen.dart';
 import 'package:kasirku_flutter/core/helper/date_time_helper.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
 import 'package:kasirku_flutter/core/helper/number_helper.dart';
 import 'package:kasirku_flutter/core/widget/app_widget.dart';
 
 class CheckoutScreen extends AppWidget<CheckoutNotifier, OrderEntity, void> {
-  CheckoutScreen({required super.param1});
+  CheckoutScreen({super.key, required super.param1});
   @override
   AppBar? appBarBuild(BuildContext context) {
     return AppBar(
-      title: Text('Checkout'),
+      title: const Text('Checkout'),
     );
   }
 
@@ -22,20 +21,20 @@ class CheckoutScreen extends AppWidget<CheckoutNotifier, OrderEntity, void> {
   Widget bodyBuild(BuildContext context) {
     return SafeArea(
         child: SingleChildScrollView(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         children: [
           _customerLayout(context),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           _productLayout(context),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           _paymentLayout(context),
-          SizedBox(height: 20),
-          Container(
+          const SizedBox(height: 20),
+          SizedBox(
               width: double.maxFinite,
               child: FilledButton(
                   onPressed: () => _onPressSend(context),
-                  child: Text(
+                  child: const Text(
                     'Kirim',
                   )))
         ],
@@ -45,7 +44,7 @@ class CheckoutScreen extends AppWidget<CheckoutNotifier, OrderEntity, void> {
 
   _customerLayout(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           border: Border.all(
               color: GlobalHelper.getColorSchema(context).shadow, width: 0.5),
@@ -57,59 +56,59 @@ class CheckoutScreen extends AppWidget<CheckoutNotifier, OrderEntity, void> {
             style: GlobalHelper.getTextTheme(context,
                 appTextStyle: AppTextStyle.TITLE_MEDIUM),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             children: [
-              Icon(Icons.person),
-              SizedBox(width: 3),
+              const Icon(Icons.person),
+              const SizedBox(width: 3),
               Text(': ${notifier.order.name}')
             ],
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             children: [
               Icon((notifier.order.gender == CheckoutNotifier.MALE)
                   ? Icons.male
                   : Icons.female),
-              SizedBox(width: 3),
+              const SizedBox(width: 3),
               Text(
                   ': ${(notifier.order.gender == CheckoutNotifier.MALE) ? 'Laki-laki' : 'Perempuan'}')
             ],
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             children: [
-              Icon(Icons.email),
-              SizedBox(width: 3),
+              const Icon(Icons.email),
+              const SizedBox(width: 3),
               Text(': ${notifier.order.email ?? '-'}')
             ],
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             children: [
-              Icon(Icons.phone),
-              SizedBox(width: 3),
+              const Icon(Icons.phone),
+              const SizedBox(width: 3),
               Text(': ${notifier.order.phone ?? '-'}')
             ],
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             children: [
-              Icon(Icons.event),
-              SizedBox(width: 3),
+              const Icon(Icons.event),
+              const SizedBox(width: 3),
               Text(
                   ': ${(notifier.order.birthday != null) ? DateTimeHelper.formatDateTimeFromString(dateTimeString: notifier.order.birthday!, format: 'd MMM yyyy') : '-'}')
             ],
           ),
-          SizedBox(height: 5),
-          Align(
+          const SizedBox(height: 5),
+          const Align(
             alignment: AlignmentDirectional.centerStart,
             child: Text('Notes : '),
           ),
           Row(
             children: [
-              SizedBox(width: 25),
-              Expanded(child: Text('${notifier.order.notes ?? '-'}'))
+              const SizedBox(width: 25),
+              Expanded(child: Text(notifier.order.notes ?? '-'))
             ],
           ),
         ],
@@ -119,7 +118,7 @@ class CheckoutScreen extends AppWidget<CheckoutNotifier, OrderEntity, void> {
 
   _paymentLayout(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           border: Border.all(
               color: GlobalHelper.getColorSchema(context).shadow, width: 0.5),
@@ -131,33 +130,37 @@ class CheckoutScreen extends AppWidget<CheckoutNotifier, OrderEntity, void> {
             style: GlobalHelper.getTextTheme(context,
                 appTextStyle: AppTextStyle.TITLE_MEDIUM),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           TextField(
             controller: notifier.totalController,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
+            readOnly: true,
+            decoration: const InputDecoration(
                 label: Text('Total Pembayaran'), border: OutlineInputBorder()),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           DropdownMenu<int>(
-            expandedInsets: EdgeInsets.symmetric(horizontal: 1),
-            label: Text('Metode Pembayaran'),
+            expandedInsets: const EdgeInsets.symmetric(horizontal: 1),
+            label: const Text('Metode Pembayaran'),
             dropdownMenuEntries: notifier.listDropdownPaymentMethod,
             initialSelection: notifier.initialPaymentMethod,
             controller: notifier.methodController,
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           TextField(
             controller: notifier.amountController,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 label: Text('Nominal Bayar'), border: OutlineInputBorder()),
+            onSubmitted: (value) => _updateChangeAmount(),
+            onTap: () => _updateChangeAmount(),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           TextField(
             controller: notifier.changeController,
+            readOnly: true,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 label: Text('Kembalian'), border: OutlineInputBorder()),
           ),
         ],
@@ -167,7 +170,7 @@ class CheckoutScreen extends AppWidget<CheckoutNotifier, OrderEntity, void> {
 
   _productLayout(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
             border: Border.all(
                 color: GlobalHelper.getColorSchema(context).shadow, width: 0.5),
@@ -178,18 +181,18 @@ class CheckoutScreen extends AppWidget<CheckoutNotifier, OrderEntity, void> {
             style: GlobalHelper.getTextTheme(context,
                 appTextStyle: AppTextStyle.TITLE_MEDIUM),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           ListView.separated(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             separatorBuilder: (context, index) => Column(
               children: [
-                SizedBox(height: 3),
+                const SizedBox(height: 3),
                 Container(
                   height: 0.5,
                   color: GlobalHelper.getColorSchema(context).shadow,
                 ),
-                SizedBox(height: 3)
+                const SizedBox(height: 3)
               ],
             ),
             itemCount: notifier.order.items.length,
@@ -224,7 +227,22 @@ class CheckoutScreen extends AppWidget<CheckoutNotifier, OrderEntity, void> {
   }
 
   _onPressSend(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => PrintScreen()));
+    notifier.send();
+  }
+
+  @override
+  checkVariable(BuildContext context) async {
+    if (notifier.isSuccess) {
+      await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  DetailOrderScreen(param1: notifier.order.id)));
+      Navigator.pop(context, true);
+    }
+  }
+
+  _updateChangeAmount() {
+    notifier.updateChangeAmount();
   }
 }

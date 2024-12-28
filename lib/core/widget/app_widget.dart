@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 abstract class AppWidget<T extends AppProvider, P1, P2>
     extends StatelessWidget {
-  AppWidget({Key? key, this.param1, this.param2}) : super(key: key);
+  AppWidget({super.key, this.param1, this.param2});
   final P1? param1;
   final P2? param2;
   late T notifier;
@@ -35,7 +35,7 @@ abstract class AppWidget<T extends AppProvider, P1, P2>
     return Scaffold(
         appBar: appBarBuild(context),
         body: (notifier.isLoading)
-            ? LoadingAppWidget()
+            ? const LoadingAppWidget()
             : (notifier.errorMessage.isNotEmpty)
                 ? ErrorAppWidget(
                     description: notifier.errorMessage,

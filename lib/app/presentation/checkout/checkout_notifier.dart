@@ -22,13 +22,13 @@ class CheckoutNotifier extends AppProvider {
   List<DropdownMenuEntry<int>> _listDropdownPaymentMethod = [];
   int _initialPaymentMethod = -1;
 
-  TextEditingController _totalController = TextEditingController();
+  final TextEditingController _totalController = TextEditingController();
 
-  TextEditingController _methodController = TextEditingController();
+  final TextEditingController _methodController = TextEditingController();
 
-  TextEditingController _amountController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
 
-  TextEditingController _changeController = TextEditingController();
+  final TextEditingController _changeController = TextEditingController();
 
   OrderEntity get order => _order;
 
@@ -70,9 +70,9 @@ class CheckoutNotifier extends AppProvider {
 
   _updateValuePayment() {
     int tempTotal = 0;
-    _order.items.forEach(
-      (element) => tempTotal += element.quantity * element.price,
-    );
+    for (var element in _order.items) {
+      tempTotal += element.quantity * element.price;
+    }
     _totalController.text = tempTotal.toString();
     _amountController.text = '0';
     updateChangeAmount();
@@ -87,9 +87,9 @@ class CheckoutNotifier extends AppProvider {
 
   send() async {
     showLoading();
-    if (_amountController.text.isEmpty)
+    if (_amountController.text.isEmpty) {
       snackBarMessage = 'Nominal bayar harus diisi';
-    else {
+    } else {
       final int paymentMethodValue = (_methodController.text.isNotEmpty)
           ? _listDropdownPaymentMethod
               .where(
@@ -105,6 +105,7 @@ class CheckoutNotifier extends AppProvider {
           changeAmount: int.parse(_changeController.text));
       final response = await _orderSendUseCase(param: _order);
       if (response.success) {
+        _order = _order.copyWith(id: response.data);
         _isSuccess = true;
       } else {
         snackBarMessage = response.message;

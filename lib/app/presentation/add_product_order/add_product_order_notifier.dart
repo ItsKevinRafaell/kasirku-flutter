@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:kasirku_flutter/app/domain/entity/product.dart';
 import 'package:kasirku_flutter/app/domain/usecase/product_get_all.dart';
 import 'package:kasirku_flutter/core/provider/app_provider.dart';
@@ -13,16 +12,16 @@ class AddProductOrderNotifier extends AppProvider {
     init();
   }
 
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   List<ProductItemOrderEntity> _listOrderItem = [];
 
   TextEditingController get searchController => _searchController;
 
   List<ProductItemOrderEntity> get listOrderItem {
-    if (_searchController.text.isEmpty)
+    if (_searchController.text.isEmpty) {
       return _listOrderItem;
-    else {
+    } else {
       return _listOrderItem
           .where((element) =>
               element.name
@@ -46,9 +45,9 @@ class AddProductOrderNotifier extends AppProvider {
 
   int get totalProduct {
     int totalTemp = 0;
-    _listOrderItem.forEach(
-      (element) => totalTemp += element.quantity,
-    );
+    for (var element in _listOrderItem) {
+      totalTemp += element.quantity;
+    }
     return totalTemp;
   }
 
@@ -124,7 +123,7 @@ class AddProductOrderNotifier extends AppProvider {
             'Stok produk ${item.name} (#${item.barcode}) tidak mencukupi';
       }
     } else {
-      snackBarMessage = 'Produk (#${param}) tidak ditemukan';
+      snackBarMessage = 'Produk (#$param) tidak ditemukan';
     }
     notifyListeners();
   }

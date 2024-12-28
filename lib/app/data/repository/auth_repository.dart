@@ -5,7 +5,6 @@ import 'package:kasirku_flutter/app/domain/repository/auth_repository.dart';
 import 'package:kasirku_flutter/core/constant/constant.dart';
 import 'package:kasirku_flutter/core/helper/shared_preferences_helper.dart';
 import 'package:kasirku_flutter/core/network/data_state.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   final AuthApiService _authApiService;

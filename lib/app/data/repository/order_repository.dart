@@ -23,9 +23,9 @@ class OrderRepositoryImpl extends OrderRepository {
   }
 
   @override
-  Future<DataState> insert(OrderEntity param) {
-    return handleResponse(
-        () => _orderApiService.insert(body: param.toJson()), (json) => null);
+  Future<DataState<int>> insert(OrderEntity param) {
+    return handleResponse(() => _orderApiService.insert(body: param.toJson()),
+        (json) => json['id']);
   }
 
   @override

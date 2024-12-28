@@ -14,14 +14,14 @@ abstract class OrderApiService {
   @GET(ORDER_URL)
   Future<HttpResponse<DataState>> getAll();
 
-  @GET(ORDER_URL + '/{id}')
+  @GET('$ORDER_URL/{id}')
   Future<HttpResponse<DataState>> getById({@Path('id') required int id});
 
   @POST(ORDER_URL)
   Future<HttpResponse<DataState>> insert(
       {@Body() required Map<String, dynamic> body});
 
-  @PUT(ORDER_URL + '/{id}')
+  @PUT('$ORDER_URL/{id}')
   Future<HttpResponse<DataState>> update(
       {@Path('id') required int id,
       @Body() required Map<String, dynamic> body});

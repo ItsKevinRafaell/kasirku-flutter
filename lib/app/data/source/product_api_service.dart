@@ -13,7 +13,7 @@ abstract class ProductApiService {
 
   @GET(PRODUCT_URL)
   Future<HttpResponse<DataState>> getAll();
-  @GET(PRODUCT_URL + '/barcode/{barcode}')
+  @GET('$PRODUCT_URL/barcode/{barcode}')
   Future<HttpResponse<DataState>> getByBarcode(
       {@Path('id') required String barcode});
 }
