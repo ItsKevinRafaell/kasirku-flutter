@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kasirku_flutter/app/presentation/login/login_screen.dart';
 import 'package:kasirku_flutter/core/helper/global_helper.dart';
+import 'package:kasirku_flutter/core/helper/shared_preferences_helper.dart';
 
 class ErrorAppWidget extends StatelessWidget {
   final String description;
@@ -32,10 +34,23 @@ class ErrorAppWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              FilledButton.icon(
-                  onPressed: onPressButton,
-                  label: const Text('Coba Lagi'),
-                  icon: const Icon(Icons.refresh)),
+              (description.contains('401') ||
+                      description.toLowerCase().contains('unauthenticated'))
+                  ? FilledButton(
+                      onPressed: () async {
+                        await SharedPreferencesHelper.logout();
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen()),
+                            (route) => false);
+                      },
+                      child: Text('Logout'),
+                    )
+                  : FilledButton.icon(
+                      onPressed: onPressButton,
+                      label: const Text('Coba Lagi'),
+                      icon: const Icon(Icons.refresh)),
             ],
           ),
         ),
